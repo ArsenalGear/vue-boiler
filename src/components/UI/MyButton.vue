@@ -1,0 +1,51 @@
+<script setup lang="ts">
+import { toRefs, watch, reactive } from 'vue'
+import { TButtonType } from '@/components/UI/types'
+import { mapState } from '@/hooks/useGetters'
+import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+const { theme } = mapState()
+// const props = defineProps({
+//   disabled: { type: String, required: true },
+// })
+
+const props = defineProps<TButtonType>()
+
+//реактивный пропс
+const { disabled } = toRefs(props)
+
+const palette = reactive(getInitialTheme())
+
+watch(
+  () => theme.value.themeColor,
+  () => handleThemeChange(palette)
+)
+// watch(
+//   () => theme.value.themeColor,
+//   (themeMode) => {
+//     handleThemeChange(themeMode, palette)
+//   }
+// )
+</script>
+
+<template>
+  <button :class="{ disabled: disabled }" class="btn">
+    <slot />
+    <span> {{ theme.themeColor }}</span>
+    <span :style="{ color: palette.spanColor }"> {{ 777 }}</span>
+    <pre> palette.spanColor {{ palette.spanColor }}</pre>
+  </button>
+</template>
+
+<style scoped>
+.btn {
+  padding: 10px 15px;
+  background: none;
+  color: v-bind('palette.color');
+  border: 1px solid teal;
+  cursor: pointer;
+  background: v-bind('palette.background');
+}
+.disabled {
+  background: v-bind('theme.backgroundHeader');
+}
+</style>
