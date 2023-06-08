@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { toRefs, watch, reactive } from 'vue'
-import { mapState } from '@/hooks/useGetters'
+import { mapGetters } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 type TBaseButton = { disabled?: boolean }
 
-const { theme } = mapState()
+const { getTheme } = mapGetters()
 const props = defineProps<TBaseButton>()
 const { disabled } = toRefs(props)
 const palette = reactive(getInitialTheme())
 
 watch(
-  () => theme.value.themeColor,
+  () => getTheme.value.themeColor,
   () => handleThemeChange(palette)
 )
 </script>

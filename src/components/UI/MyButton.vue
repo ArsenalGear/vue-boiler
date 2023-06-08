@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toRefs, watch, reactive } from 'vue'
 import { TButtonType } from '@/components/UI/types'
-import { mapState } from '@/hooks/useGetters'
+import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 const { theme } = mapState()
 // const props = defineProps({
@@ -19,20 +19,11 @@ watch(
   () => theme.value.themeColor,
   () => handleThemeChange(palette)
 )
-// watch(
-//   () => theme.value.themeColor,
-//   (themeMode) => {
-//     handleThemeChange(themeMode, palette)
-//   }
-// )
 </script>
 
 <template>
   <button :class="{ disabled: disabled }" class="btn">
     <slot />
-    <span> {{ theme.themeColor }}</span>
-    <span :style="{ color: palette.spanColor }"> {{ 777 }}</span>
-    <pre> palette.spanColor {{ palette.spanColor }}</pre>
   </button>
 </template>
 

@@ -6,10 +6,8 @@ import FormInput from '@/components/UI/FormInput/FormInput.vue'
 import { FormData } from '@/views/login/types'
 import { reactive, watch } from 'vue'
 import { useHead } from '@vueuse/head'
-import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 const store = useStore()
-const { locale } = useI18n({ useScope: 'global' })
 
 useHead({
   title: 'Главная страница',
@@ -50,57 +48,48 @@ const submitForm = (event: Event): void => {
   }
 }
 
-const switchLang = () => {
-  locale.value === 'en' ? (locale.value = 'ru') : (locale.value = 'en')
-  localStorage.setItem('lang', locale.value as string)
-}
-
 watch(() => formData, isSubmitButtonDisable, { deep: true })
-// watch(
-//   () => formData,
-//   () => console.log(13423),
-//   { deep: true }
-// )
 </script>
 
 <template>
   <div class="login">
     <div class="login-wrapper">
-      <div class="login__left-block">
-        <div class="login__logo-wrapper">
-          <img alt="logo" src="@/assets/images/logo.png" />
+      <div class="login-wrapper-block">
+        <div class="login__left-block">
+          <div class="login__logo-wrapper">
+            <img alt="logo" src="@/assets/images/logo.png" />
+          </div>
+          <div class="login__user-logo-wrapper"></div>
         </div>
-        <div class="login__user-logo-wrapper"></div>
-      </div>
-      <div class="login__right-block">
-        <div class="login__form-block">
-          <BaseButton type="button" @click="switchLang">Переключить язык</BaseButton>
-          <form @submit.prevent>
-            <BaseText type="h1" class="bold">{{ $t('title') }}</BaseText>
-            <div class="form-item-wrapper">
-              <FormInput
-                name="user"
-                :style="{ border: 'unset', height: '2.5rem', borderRadius: '0.5rem' }"
-                :placeholder="$t('placeholders.username')"
-                @input="(value) => (formData.username = value)"
-              />
-            </div>
-            <div class="form-item-wrapper">
-              <FormInput
-                name="password"
-                :style="{ border: 'unset', height: '2.5rem', borderRadius: '0.5rem' }"
-                :placeholder="$t('placeholders.password')"
-                @input="(value) => (formData.password = value)"
-              />
-            </div>
-            <BaseButton
-              :disabled="formData.isButtonDisabled"
-              type="button"
-              :style="{ alignSelf: 'end' }"
-              @click="submitForm"
-              >{{ $t('title') }}
-            </BaseButton>
-          </form>
+        <div class="login__right-block">
+          <div class="login__form-block">
+            <form @submit.prevent>
+              <BaseText type="h1" class="bold">{{ $t('title') }}</BaseText>
+              <div class="form-item-wrapper">
+                <FormInput
+                  name="user"
+                  :style="{ border: 'unset', height: '2.5rem', borderRadius: '0.5rem' }"
+                  :placeholder="$t('placeholders.username')"
+                  @input="(value) => (formData.username = value)"
+                />
+              </div>
+              <div class="form-item-wrapper">
+                <FormInput
+                  name="password"
+                  :style="{ border: 'unset', height: '2.5rem', borderRadius: '0.5rem' }"
+                  :placeholder="$t('placeholders.password')"
+                  @input="(value) => (formData.password = value)"
+                />
+              </div>
+              <BaseButton
+                :disabled="formData.isButtonDisabled"
+                type="button"
+                :style="{ alignSelf: 'end' }"
+                @click="submitForm"
+                >{{ $t('title') }}
+              </BaseButton>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -108,6 +97,7 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/functions';
 .login {
   display: flex;
   width: 100%;
@@ -116,20 +106,26 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
   max-height: 100%;
 
   &-wrapper {
-    display: flex;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-flex: 0;
-    flex-grow: 0;
     height: 100%;
     width: 100%;
     padding: 0 6.25rem;
+    display: flex;
+    justify-content: center;
+    flex-grow: 0;
     background-image: linear-gradient(
       233.98deg,
       rgb(210, 218, 236) 0%,
       rgb(239, 237, 230) 47.79%,
       rgb(250, 249, 249) 92.69%
     );
+    &-block {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-grow: 0;
+      max-width: rem(1400);
+    }
   }
 
   &__left-block {

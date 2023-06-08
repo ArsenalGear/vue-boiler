@@ -3,5 +3,12 @@
   "placeholders": {
     "username": "username",
     "password": "password"
-  }
+  },
+  "dashboardTitle": "Administration",
+  "chooseList": "Select from the list",
+  "changeLanguage": "Change language",
+  "logout": "Log out",
+  "authorization": "Authorization",
+  "authentication": "Authentication",
+  "empty": ""
 }

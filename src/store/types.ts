@@ -1,13 +1,13 @@
 export type RootState = {
-  count: number
+  userRole: ''
 }
 
 export type ThemeState = {
   themeColor: string
-  count: number
 }
 
 export type AuthState = {
+  overlayText: string
   token: string
   isAuthenticated: boolean
 }

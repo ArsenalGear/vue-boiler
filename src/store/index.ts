@@ -5,13 +5,13 @@ import { authModule } from '@/store/authModule'
 import type { RootState } from '@/store/types'
 
 const vuexPersist = new VuexPersistence<RootState>({
-  key: 'my-app',
+  key: 'vue-app',
   storage: localStorage
 })
 
 const store: Store<RootState> = createStore<RootState>({
   state: {
-    count: 2
+    userRole: ''
   },
   modules: {
     auth: authModule,

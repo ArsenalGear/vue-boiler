@@ -3,5 +3,12 @@
   "placeholders": {
     "username": "Имя пользователя",
     "password": "Пароль"
-  }
+  },
+  "dashboardTitle": "Администрирование",
+  "chooseList": "Выберите из списка",
+  "changeLanguage": "Сменить язык",
+  "logout": "Выйти",
+  "authorization": "Авторизация",
+  "authentication": "Аутентификация",
+  "empty": ""
 }

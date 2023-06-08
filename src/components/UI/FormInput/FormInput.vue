@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watch, reactive, toRefs } from 'vue'
-import { mapState } from '@/hooks/useGetters'
+import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 const { theme } = mapState()
@@ -48,7 +48,6 @@ watch(
   &-wrapper {
     display: flex;
     align-items: center;
-    max-width: rem(500);
     padding: rem(6) rem(12);
     background: v-bind('palette.formInputBackground');
     border-radius: 4px;
