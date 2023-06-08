@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 3000",
+    "test": "eslint --ext .ts,.vue . --fix",
     "build": "vite build",
     "serve": "vite preview",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
