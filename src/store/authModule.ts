@@ -10,6 +10,8 @@ export const authModule = {
     isAuthenticated: false
   }),
 
+
+
   getters: {
     getToken(state: AuthState) {
       return state.token
