@@ -4,9 +4,9 @@ import { reactive, watch } from 'vue'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import BaseOverlay from '@/components/custom/BaseOverlay/BaseOverlay.vue'
 const palette = reactive(getInitialTheme())
-// todo 'auth/getOverlayText': getOverlayText
+// todo 'auth/getOverlayText': getOverlayText1
 const { getTheme, 'auth/getOverlayText': getOverlayText } = mapGetters()
-
+// const test
 watch(
   () => getTheme.value.themeColor,
   () => handleThemeChange(palette)
