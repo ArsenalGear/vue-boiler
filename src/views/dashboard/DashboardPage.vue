@@ -1,12 +1,22 @@
-<script setup lang="ts">
-import BaseHeader from '@/components/custom/BaseHeader/BaseHeader.vue'
-import BaseLayout from '@/components/custom/BaseLayout/BaseLayout.vue'
+<script lang="ts" setup="">
+import { useHead } from '@vueuse/head'
+
+import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
+useHead({
+  title: 'Главная страница',
+  meta: [
+    {
+      name: 'description',
+      content: 'Описание'
+    }
+  ]
+})
 </script>
 
 <template>
-  <BaseLayout>
-    <BaseHeader />
-  </BaseLayout>
+  <BaseWrapper :menu-title="'menu'" :content-title="'dashboard'"> <p>content</p> </BaseWrapper>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import '@/assets/styles/functions';
+</style>

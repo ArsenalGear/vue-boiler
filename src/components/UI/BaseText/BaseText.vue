@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { watch, reactive, toRefs } from 'vue'
 
-import { mapState } from '@/hooks/useVuex'
+import { mapGetters } from '@/hooks/useVuex'
+const { getTheme } = mapGetters()
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 type TBaseText = { type: string }
 
-const { theme } = mapState()
 const palette = reactive(getInitialTheme())
 const props = defineProps<TBaseText>()
 const { type } = toRefs(props)
 
 watch(
-  () => theme.value.themeColor,
+  () => getTheme.value,
   () => handleThemeChange(palette)
 )
 </script>
@@ -44,6 +44,12 @@ watch(
 h1 {
   margin: 0 0 rem(24);
   font: rem(24) / rem(28) Roboto-Bold;
+  letter-spacing: 0;
+  color: v-bind('palette.textColor');
+}
+h2 {
+  margin: 0;
+  font: rem(24) / rem(28) Roboto-Light;
   letter-spacing: 0;
   color: v-bind('palette.textColor');
 }

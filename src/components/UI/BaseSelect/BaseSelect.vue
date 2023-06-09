@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, watch, ref, toRefs, onMounted, onBeforeUnmount } from 'vue'
 
-import { mapState } from '@/hooks/useVuex'
+import { mapGetters } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 type TOptionItem = { value: string; label: string }
@@ -9,7 +9,7 @@ type TList = { list: TOptionItem[]; selectedOption: string }
 
 const props = defineProps<TList>()
 const emit = defineEmits(['change'])
-const { theme } = mapState()
+const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
 const { list } = toRefs(props)
 const isOpen = ref(false)
@@ -43,7 +43,7 @@ const selectOption = (option: { value: string }) => {
 }
 
 watch(
-  () => theme.value.themeColor,
+  () => getTheme.value,
   () => handleThemeChange(palette)
 )
 </script>

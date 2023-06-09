@@ -10,5 +10,7 @@
   "logout": "Log out",
   "authorization": "Authorization",
   "authentication": "Authentication",
-  "empty": ""
+  "empty": "",
+  "menu": "Menu",
+  "dashboard": "Dashboard"
 }

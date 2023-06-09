@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { watch, reactive, toRefs } from 'vue'
 
-import { mapState } from '@/hooks/useVuex'
+import { mapGetters } from '@/hooks/useVuex'
+const { getTheme } = mapGetters()
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 type TInput = { placeholder: string; name: string }
 
-const { theme } = mapState()
 const props = defineProps<TInput>()
 const { placeholder } = toRefs(props)
 const palette = reactive(getInitialTheme())
 defineEmits(['input'])
 
 watch(
-  () => theme.value.themeColor,
+  () => getTheme.value,
   () => handleThemeChange(palette)
 )
 </script>
