@@ -3,10 +3,12 @@ import { mapGetters } from '@/hooks/useVuex'
 import { reactive, watch } from 'vue'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import BaseOverlay from '@/components/custom/BaseOverlay/BaseOverlay.vue'
+
 const palette = reactive(getInitialTheme())
-// todo 'auth/getOverlayText': getOverlayText1
+// todo 'auth/getOverlayText': getOverlayTextй
+
 const { getTheme, 'auth/getOverlayText': getOverlayText } = mapGetters()
-// const test
+
 watch(
   () => getTheme.value.themeColor,
   () => handleThemeChange(palette)
