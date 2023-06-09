@@ -11,6 +11,7 @@ type Palette = {
 }
 
 export function handleThemeChange(palette: Palette): void {
+  //todo store.getters
   const getTheme = store.getters.getTheme
   const resultMode: ResultMode = getTheme === 'light' ? light : dark
   for (const key in palette) {

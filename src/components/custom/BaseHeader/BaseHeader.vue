@@ -1,26 +1,28 @@
 <script setup lang="ts">
 import { watch, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { LightTheme, DarkTheme } from '@/assets/images/imageConstants'
-const { switchThemeShort } = mapMutations()
-const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
 import BaseSelect from '@/components/UI/BaseSelect/BaseSelect.vue'
 import router from '@/router'
-import { useStore } from 'vuex'
-import { useI18n } from 'vue-i18n'
-const store = useStore()
+
 const { locale } = useI18n({ useScope: 'global' })
+const { switchThemeShort, 'auth/setToken': setToken, 'auth/setAuth': setAuth } = mapMutations()
+const { getTheme } = mapGetters()
+const palette = reactive(getInitialTheme())
 
 const formState = reactive({ settings: '' })
 
 const handleChangeSettings = (value: string) => {
   if (value === 'logout') {
-    store.commit('auth/setToken', '')
-    store.commit('auth/setAuth', false)
+    //todo store.commit
+    // store.commit('auth/setToken', '')
+    setToken('')
+    setAuth(false)
     localStorage.clear()
     router.push('/login')
   } else {

@@ -9,11 +9,9 @@ const mapGetters = () => {
 }
 
 const mapMutations = () => {
-  const store = useStore()
+  const store: any = useStore()
 
   return Object.fromEntries(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     Object.keys(store._mutations).map((mutation) => [
       mutation,
       (value: any) => store.commit(mutation, value)

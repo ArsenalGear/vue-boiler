@@ -1,15 +1,16 @@
 import { createApp } from 'vue'
 import '@/assets/styles/main.scss'
 import '@/assets/fonts/roboto/roboto.scss'
+import { createHead } from '@vueuse/head'
+import { createI18n } from 'vue-i18n'
+
 import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
 import components from '@/components/UI'
 import customComponents from '@/components/custom'
-import { createHead } from '@vueuse/head'
 import { languages } from '@/i18n'
 import { defaultLocale } from '@/i18n'
-import { createI18n } from 'vue-i18n'
 
 const head = createHead()
 const messages = Object.assign(languages)

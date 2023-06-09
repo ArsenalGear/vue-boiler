@@ -14,7 +14,7 @@ module.exports = {
     sourceType: 'module'
   },
 
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import'],
 
   extends: [
     'plugin:vue/vue3-recommended',
@@ -24,6 +24,13 @@ module.exports = {
   ],
 
   rules: {
+    'import/order': [
+      'error',
+      {
+        groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+        'newlines-between': 'always'
+      }
+    ],
     'no-unused-vars': 'error',
     '@typescript-eslint/no-unused-vars': 'error',
     'no-console': 'off',

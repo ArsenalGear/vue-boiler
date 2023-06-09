@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { toRefs, watch, reactive } from 'vue'
+
 import { mapGetters } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
@@ -17,8 +18,7 @@ watch(
 </script>
 
 <template>
-  <!--   :disabled="{ disabled }", где disabled - это реактивная ссылка на props, нужно использовать :disabled="disabled", чтобы передать фактическое-->
-  <button type="button" :disabled="disabled" class="base-button" :class="{ disabled: disabled }">
+  <button type="button" :disabled="disabled" :class="{ 'base-button': true, disabled: disabled }">
     <slot />
   </button>
 </template>
