@@ -10,5 +10,7 @@
   "logout": "Выйти",
   "authorization": "Авторизация",
   "authentication": "Аутентификация",
-  "empty": ""
+  "empty": "",
+  "menu": "Разделы",
+  "dashboard": "Дашборд"
 }

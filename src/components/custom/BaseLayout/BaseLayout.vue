@@ -1,9 +1,16 @@
 <script lang="ts" setup="">
 import { reactive } from 'vue'
+import { watch } from 'vue'
 
-import { getInitialTheme } from '@/hooks/useTheme'
-
+import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import { mapGetters } from '@/hooks/useVuex'
+const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
+
+watch(
+  () => getTheme.value,
+  () => handleThemeChange(palette)
+)
 </script>
 
 <template>
@@ -25,6 +32,7 @@ const palette = reactive(getInitialTheme())
   &__inner {
     width: 100%;
     height: 100%;
+    padding-bottom: rem(20);
     background: v-bind('palette.bodyBackground');
   }
 }

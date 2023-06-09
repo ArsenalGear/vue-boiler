@@ -1,7 +1,8 @@
+import type { Dispatch, Commit } from 'vuex'
+
 import { type FormData } from '@/views/login/types'
 import { post, get } from '@/api/config'
 import type { AuthState } from '@/store/types'
-import type { Dispatch, Commit } from 'vuex'
 import router from '@/router'
 
 export const authModule = {

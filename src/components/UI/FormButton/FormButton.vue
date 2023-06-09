@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { watch, reactive } from 'vue'
 
-import { mapState } from '@/hooks/useVuex'
+import { mapGetters } from '@/hooks/useVuex'
+const { getTheme } = mapGetters()
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
-const { theme } = mapState()
 const palette = reactive(getInitialTheme())
 
 watch(
-  () => theme.value.themeColor,
+  () => getTheme.value,
   () => handleThemeChange(palette)
 )
 </script>

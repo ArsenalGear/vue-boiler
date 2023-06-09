@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import * as Yup from 'yup'
+import { reactive, watch } from 'vue'
+import { useHead } from '@vueuse/head'
+import { useStore } from 'vuex'
+
 import BaseButton from '@/components/UI/BaseButton/BaseButton.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import FormInput from '@/components/UI/FormInput/FormInput.vue'
 import { FormData } from '@/views/login/types'
-import { reactive, watch } from 'vue'
-import { useHead } from '@vueuse/head'
-import { useStore } from 'vuex'
 const store = useStore()
 
 useHead({
@@ -64,11 +65,16 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
         <div class="login__right-block">
           <div class="login__form-block">
             <form @submit.prevent>
-              <BaseText type="h1" class="bold">{{ $t('title') }}</BaseText>
+              <BaseText :style="{ color: '#19212f' }" type="h1">{{ $t('title') }}</BaseText>
               <div class="form-item-wrapper">
                 <FormInput
                   name="user"
-                  :style="{ border: 'unset', height: '2.5rem', borderRadius: '0.5rem' }"
+                  :style="{
+                    background: '#ffffff',
+                    border: 'unset',
+                    height: '2.5rem',
+                    borderRadius: '0.5rem'
+                  }"
                   :placeholder="$t('placeholders.username')"
                   @input="(value) => (formData.username = value)"
                 />
@@ -76,7 +82,12 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
               <div class="form-item-wrapper">
                 <FormInput
                   name="password"
-                  :style="{ border: 'unset', height: '2.5rem', borderRadius: '0.5rem' }"
+                  :style="{
+                    background: '#ffffff',
+                    border: 'unset',
+                    height: '2.5rem',
+                    borderRadius: '0.5rem'
+                  }"
                   :placeholder="$t('placeholders.password')"
                   @input="(value) => (formData.password = value)"
                 />

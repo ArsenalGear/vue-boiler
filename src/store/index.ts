@@ -1,5 +1,6 @@
 import { createStore, Store } from 'vuex'
 import VuexPersistence from 'vuex-persist'
+
 import { themeModule } from '@/store/themeModule'
 import { authModule } from '@/store/authModule'
 import type { RootState } from '@/store/types'
