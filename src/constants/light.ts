@@ -18,6 +18,7 @@ export const light = {
   formButtonCancelBackground: '#eceff1',
   formInputBackground: '#ffffff',
   formSelectLiSelected: '#7191E1',
+  formSelectBackground: 'transparent',
   formSelectLiHover: '#7191E1cc',
   formSelectIcon: '#19212f80',
 

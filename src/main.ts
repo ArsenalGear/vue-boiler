@@ -5,6 +5,7 @@ import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
 import components from '@/components/UI'
+import customComponents from '@/components/custom'
 import { createHead } from '@vueuse/head'
 import { languages } from '@/i18n'
 import { defaultLocale } from '@/i18n'
@@ -23,6 +24,9 @@ const i18n = createI18n({
 const app = createApp(App)
 
 components.forEach((component) => {
+  app.component(component.name, component)
+})
+customComponents.forEach((component) => {
   app.component(component.name, component)
 })
 app.use(router).use(store).use(head).use(i18n).mount('#app')

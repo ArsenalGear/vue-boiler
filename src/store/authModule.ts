@@ -7,7 +7,8 @@ import router from '@/router'
 export const authModule = {
   state: () => ({
     token: '',
-    isAuthenticated: false
+    isAuthenticated: false,
+    overlayText: 'empty'
   }),
 
   getters: {
@@ -16,6 +17,9 @@ export const authModule = {
     },
     getAuthStatus(state: AuthState) {
       return state.isAuthenticated
+    },
+    getOverlayText(state: AuthState) {
+      return state.overlayText
     }
   },
 
@@ -25,17 +29,22 @@ export const authModule = {
     },
     setAuth(state: AuthState, isAuthenticated: boolean) {
       state.isAuthenticated = isAuthenticated
+    },
+    setOverlayText(state: AuthState, overlayText: string) {
+      state.overlayText = overlayText
     }
   },
 
   actions: {
-    async getOrderMigration() {
+    async getOrderMigration({ commit }: { commit: Commit }) {
       try {
+        commit('setOverlayText', 'authentication')
+        await router.push('/dashboard')
         await get(`/migration/status?page=0&size=9`).then((response) => response.data)
       } catch (e) {
         console.log(e)
       } finally {
-        // commit('setLoading', false)
+        commit('setOverlayText', 'empty')
       }
     },
 
@@ -46,17 +55,17 @@ export const authModule = {
       // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
       const { isButtonDisabled, ...rest } = data
       try {
+        commit('setOverlayText', 'authorization')
         const result: { id_token: string } = await post(`/authenticate`, rest).then(
           (response) => response.data
         )
         commit('setToken', result.id_token)
         commit('setAuth', true)
-        await router.push('/about')
         await dispatch('getOrderMigration')
       } catch (e) {
         console.log(e)
       } finally {
-        // commit('setToken', false)по
+        commit('setOverlayText', 'empty')
       }
     }
   },

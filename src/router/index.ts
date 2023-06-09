@@ -3,6 +3,7 @@ import store from '@/store'
 
 const authRoutesList = [
   { path: 'about', component: 'AboutPage' },
+  { path: 'dashboard', component: 'DashboardPage' },
   { path: 'NotFoundAuthPage', component: 'NotFoundAuthPage' }
 ]
 

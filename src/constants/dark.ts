@@ -18,6 +18,7 @@ export const dark = {
   baseButtonDisabledBackground: 'grey',
   formButtonBackground: '#7191E1',
   formButtonDisabledBackground: '#f7f8fa',
+  formSelectBackground: '#19212f',
   formButtonCancelBackground: '#eceff1',
   formInputBackground: '#19212f',
   formSelectLiSelected: '#7191E1',

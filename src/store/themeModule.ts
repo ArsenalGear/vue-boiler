@@ -2,8 +2,7 @@ import type { ThemeState } from '@/store/types'
 
 export const themeModule = {
   state: (): ThemeState => ({
-    themeColor: 'light',
-    count: 7
+    themeColor: 'light'
   }),
   mutations: {
     switchTheme: (state: ThemeState, value: string) => {
@@ -15,9 +14,6 @@ export const themeModule = {
     }
   },
   getters: {
-    getTheme: (state: ThemeState) => state.themeColor,
-    // countUp: (state: ThemeState, getters: any, rootState: RootState, rootGetters: any) =>
-    //   state.count * 2
-    countUp: (state: ThemeState) => state.count * 2
+    getTheme: (state: ThemeState) => state.themeColor
   }
 }

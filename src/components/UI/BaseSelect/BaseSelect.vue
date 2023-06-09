@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive, watch, ref, toRefs } from 'vue'
-import { mapState } from '@/hooks/useGetters'
+import { reactive, watch, ref, toRefs, onMounted, onBeforeUnmount } from 'vue'
+import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 type TOptionItem = { value: string; label: string }
@@ -13,6 +13,24 @@ const { theme } = mapState()
 const palette = reactive(getInitialTheme())
 const { list } = toRefs(props)
 const isOpen = ref(false)
+
+const handleClickOutside = (event: { target: any }) => {
+  const target = event.target
+  const dropdown = document.querySelector('.custom-dropdown')
+
+  if (dropdown && !dropdown.contains(target)) {
+    isOpen.value = false
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('click', handleClickOutside)
+})
+
+// <!--      //todo onBeforeUnmount-->
+onBeforeUnmount(() => {
+  window.removeEventListener('click', handleClickOutside)
+})
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
@@ -31,10 +49,10 @@ watch(
 
 <template>
   <div class="custom-dropdown">
-    <pre>{{ selectedOption }}</pre>
     <div class="selected-option" @click="toggleDropdown">
-      {{ selectedOption || 'Выберите из списка' }}
-      <span class="arrow"></span>
+      {{ selectedOption || $t('chooseList') }}
+      <!--      //todo class-->
+      <span :class="{ arrow: true, 'arrow-up': isOpen }"></span>
     </div>
     <ul v-if="isOpen" class="dropdown-options">
       <li
@@ -54,7 +72,6 @@ watch(
 <style lang="scss">
 @import '@/assets/styles/functions';
 .custom-dropdown {
-  min-width: 200px;
   position: relative;
   display: inline-block;
   font: rem(14) / rem(16) Roboto-Regular;
@@ -64,12 +81,20 @@ watch(
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: rem(10);
+  padding: rem(10) rem(14);
   color: v-bind('palette.textColor');
   border: 1px solid v-bind('palette.formInputBorder');
-  border-radius: 4px;
-  background: v-bind('palette.formInputBackground');
+  border-radius: 10px;
+  background: v-bind('palette.formSelectBackground');
   cursor: pointer;
+
+  & .arrow-up {
+    transform: rotate(180deg);
+  }
+
+  &:hover {
+    border: 1px solid v-bind('palette.formInputBorderHover');
+  }
 }
 
 .arrow {
@@ -93,14 +118,15 @@ watch(
   margin: 0;
   list-style: none;
   background-color: v-bind('palette.formInputBackground');
-  border: 1px solid v-bind('palette.formInputBorder');
+  //border: 1px solid v-bind('palette.formInputBorder');
   border-top: none;
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: rgba(31, 65, 104, 0.1) 0px 4px 16px;
 }
 
 .dropdown-options li {
-  padding: 10px;
+  padding: rem(7) rem(14);
+  margin: rem(5) 0;
   cursor: pointer;
   color: v-bind('palette.textColor');
 

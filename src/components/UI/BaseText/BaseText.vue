@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watch, reactive, toRefs } from 'vue'
-import { mapState } from '@/hooks/useGetters'
+import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 const { theme } = mapState()
 const palette = reactive(getInitialTheme())
@@ -21,9 +21,12 @@ watch(
   <h1 v-else-if="type === 'h1'">
     <slot />
   </h1>
-  <h2 v-else>
+  <h2 v-else-if="type === 'h2'">
     <slot />
   </h2>
+  <h3 v-else>
+    <slot />
+  </h3>
 </template>
 
 <style lang="scss">
@@ -38,6 +41,12 @@ watch(
 h1 {
   margin: 0 0 rem(24);
   font: rem(24) / rem(28) Roboto-Bold;
+  letter-spacing: 0;
+  color: v-bind('palette.textColor');
+}
+h3 {
+  margin: 0;
+  font: rem(20) / rem(28) Roboto-Light;
   letter-spacing: 0;
   color: v-bind('palette.textColor');
 }
