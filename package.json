@@ -8,7 +8,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
-    "lint": "eslint --ext .js,.vue src",
+    "lint": "eslint --ext .js,.vue src --fix",
     "lint:ts": "tslint --project tsconfig.json --config tslint.json",
     "lint:fix": "eslint --ext .ts,.vue . --fix",
     "prepare": "husky install"
@@ -46,6 +46,7 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",

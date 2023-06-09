@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { reactive, watch, ref, toRefs, onMounted, onBeforeUnmount } from 'vue'
+
 import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 type TOptionItem = { value: string; label: string }
 type TList = { list: TOptionItem[]; selectedOption: string }
+
 const props = defineProps<TList>()
-
 const emit = defineEmits(['change'])
-
 const { theme } = mapState()
 const palette = reactive(getInitialTheme())
 const { list } = toRefs(props)
@@ -38,6 +38,7 @@ const toggleDropdown = () => {
 
 const selectOption = (option: { value: string }) => {
   isOpen.value = false
+  // <!--      //todo emit-->
   emit('change', option.value)
 }
 

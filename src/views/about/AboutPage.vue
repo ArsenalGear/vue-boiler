@@ -1,14 +1,12 @@
 <script setup lang="ts">
+import { ref, onMounted, onBeforeMount, reactive, watch } from 'vue'
+
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import MyButton from '@/components/UI/MyButton.vue'
 import BaseSelect from '@/components/UI/BaseSelect/BaseSelect.vue'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
-import { ref, onMounted, onBeforeMount, reactive, watch } from 'vue'
-import router from '@/router'
 const { getTheme } = mapGetters()
 const { switchTheme, switchThemeShort } = mapMutations()
-import { useStore } from 'vuex'
-const store = useStore()
 
 //initial data
 const formState = reactive({ gender: 'option2' })
@@ -16,15 +14,7 @@ const formState = reactive({ gender: 'option2' })
 const switchThemeLong = () => {
   switchTheme(`${getTheme.value === 'light' ? 'dark' : 'light'}`) //через геттер
 }
-const LogOut = () => {
-  store.commit('auth/setToken', '')
-  store.commit('auth/setAuth', false)
-  localStorage.clear()
-  router.push('/login')
-}
-const notFOund = () => {
-  router.push('/NotFoundAuthPage')
-}
+
 //отрабатывает в тот момент когда компонент смонтирован, самый часто используемый хук для запросов на сервер
 onMounted(() => {
   // console.log(2, 'mounted!')
@@ -66,9 +56,6 @@ const handleUpdate = (value: string) => {
     <FormButton disabled="true">FormButton active disabled</FormButton>
     <FormButton class="cancel">FormButton cancel</FormButton>
     <br />
-
-    <br />
-
     <h1>This is an about page</h1>
   </div>
   <div id="nav">
@@ -86,9 +73,6 @@ const handleUpdate = (value: string) => {
     >
     <pre>refValue: {{ refValue }}</pre>
     <pre>reactiveUser: {{ reactiveValue.reactiveUser }}</pre>
-
-    <MyButton :disabled="false" @click="LogOut"> выйти </MyButton>
-    <MyButton :disabled="false" @click="notFOund"> не найдено </MyButton>
   </div>
 </template>
 

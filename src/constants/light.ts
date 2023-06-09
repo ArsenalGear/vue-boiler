@@ -24,14 +24,5 @@ export const light = {
 
   //border
   formInputBorder: '#19212f80',
-  formInputBorderHover: ' #7191e1',
-
-  //other
-  background: 'green',
-  color: 'blue',
-  spanColor: 'white'
+  formInputBorderHover: ' #7191e1'
 }
-
-// border: 1px solid #7191e1;
-
-// ##19212f

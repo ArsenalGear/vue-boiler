@@ -27,10 +27,5 @@ export const dark = {
 
   //border
   formInputBorder: ' #19212f80',
-  formInputBorderHover: ' #7191e1',
-
-  //other
-  background: 'red',
-  color: 'yellow',
-  spanColor: 'black'
+  formInputBorderHover: ' #7191e1'
 }

@@ -9,7 +9,7 @@ const props = defineProps<TOverlay>()
     <div class="progress-wrapper">
       <div class="progress-bar"></div>
       <!--      todo props.text-->
-      <!--      <BaseText style="color: #ccc" type="p">{{ $t('dashboardTitle') }}</BaseText>-->
+      <!--      todo style="color: #ccc"-->
       <BaseText style="color: #ccc" type="p">{{ $t(props.text || 'empty') }}</BaseText>
     </div>
   </div>

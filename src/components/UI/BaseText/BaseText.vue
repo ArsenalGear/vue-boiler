@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { watch, reactive, toRefs } from 'vue'
+
 import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+
+type TBaseText = { type: string }
+
 const { theme } = mapState()
 const palette = reactive(getInitialTheme())
-type TBaseText = { type: string }
 const props = defineProps<TBaseText>()
 const { type } = toRefs(props)
 

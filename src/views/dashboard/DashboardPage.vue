@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import BaseHeader from '@/components/custom/BaseHeader/BaseHeader.vue'
+import BaseLayout from '@/components/custom/BaseLayout/BaseLayout.vue'
 </script>
 
 <template>
-  <div class="dashboard-wrapper">
-    <div class="dashboard-wrapper__inner">
-      <BaseHeader />
-    </div>
-  </div>
+  <BaseLayout>
+    <BaseHeader />
+  </BaseLayout>
 </template>
 
 <style lang="scss"></style>

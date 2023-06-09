@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { watch, reactive, toRefs } from 'vue'
+
 import { mapState } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
-const { theme } = mapState()
 type TInput = { placeholder: string; name: string }
+
+const { theme } = mapState()
 const props = defineProps<TInput>()
 const { placeholder } = toRefs(props)
 const palette = reactive(getInitialTheme())
@@ -18,6 +20,7 @@ watch(
 
 <template>
   <div class="form-input-wrapper">
+    <!-- //todo emit-->
     <input
       :name="name"
       :placeholder="placeholder"
