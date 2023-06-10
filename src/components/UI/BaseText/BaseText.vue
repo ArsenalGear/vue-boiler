@@ -59,4 +59,8 @@ h3 {
   letter-spacing: 0;
   color: v-bind('palette.textColor');
 }
+.small-text {
+  font: 0.875rem / 1rem Roboto-Regular;
+  letter-spacing: 0.00938em;
+}
 </style>

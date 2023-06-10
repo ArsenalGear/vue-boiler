@@ -1,7 +1,10 @@
 export const menuList = [
   {
-    title: 'Экспорт/Импорт ППО',
+    title: { name: 'export', label: 'Экспорт/Импорт ППО' },
     icon: 'PPO',
-    content: ['Стенды', 'Репозитории', 'Содержимое 3']
+    content: [
+      { name: 'dashboard', label: 'Дашборд' },
+      { name: 'repositories', label: 'Репозитории' }
+    ]
   }
 ]

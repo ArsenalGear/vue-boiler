@@ -4,7 +4,7 @@
     "username": "Имя пользователя",
     "password": "Пароль"
   },
-  "dashboardTitle": "Администрирование",
+  "headerTitle": "Администрирование",
   "chooseList": "Выберите из списка",
   "changeLanguage": "Сменить язык",
   "logout": "Выйти",
@@ -12,5 +12,9 @@
   "authentication": "Аутентификация",
   "empty": "",
   "menu": "Разделы",
-  "dashboard": "Дашборд"
+  "export": "Экспорт/Импорт ППО",
+  "dashboard": "Дашборд",
+  "dashboardTitle": "Добро пожаловать !",
+  "repositories": "Репозитории",
+  "add": "Добавить"
 }

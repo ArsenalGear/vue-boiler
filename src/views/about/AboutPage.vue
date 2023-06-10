@@ -2,18 +2,18 @@
 import { ref, onMounted, onBeforeMount, reactive, watch } from 'vue'
 
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
-import MyButton from '@/components/UI/MyButton.vue'
+// import MyButton from '@/components/UI/MyButton.vue'
 import BaseSelect from '@/components/UI/BaseSelect/BaseSelect.vue'
-import { mapGetters, mapMutations } from '@/hooks/useVuex'
-const { getTheme } = mapGetters()
-const { switchTheme, switchThemeShort } = mapMutations()
+// import { mapGetters, mapMutations } from '@/hooks/useVuex'
+// const { getTheme } = mapGetters()
+// const { switchTheme, switchThemeShort } = mapMutations()
 
 //initial data
 const formState = reactive({ gender: 'option2' })
 
-const switchThemeLong = () => {
-  switchTheme(`${getTheme.value === 'light' ? 'dark' : 'light'}`) //через геттер
-}
+// const switchThemeLong = () => {
+//   switchTheme(`${getTheme.value === 'light' ? 'dark' : 'light'}`) //через геттер
+// }
 
 //отрабатывает в тот момент когда компонент смонтирован, самый часто используемый хук для запросов на сервер
 onMounted(() => {
@@ -61,16 +61,16 @@ const handleUpdate = (value: string) => {
   <div id="nav">
     <router-link to="/"> Home </router-link> |
     <router-link to="/about"> About </router-link>
-    <MyButton :disabled="false" @click="(e) => switchThemeLong(e, 1)">
-      switchTheme func плохой способ</MyButton
-    >
+    <!--    <MyButton :disabled="false" @click="(e) => switchThemeLong(e, 1)">-->
+    <!--      switchTheme func плохой способ</MyButton-->
+    <!--    >-->
 
-    <MyButton :disabled="false" @click="switchTheme(getTheme === 'light' ? 'dark' : 'light')">
-      switchTheme native плохой способ
-    </MyButton>
-    <MyButton :disabled="false" @click="switchThemeShort">
-      switchThemeShort mutation норм способ</MyButton
-    >
+    <!--    <MyButton :disabled="false" @click="switchTheme(getTheme === 'light' ? 'dark' : 'light')">-->
+    <!--      switchTheme native плохой способ-->
+    <!--    </MyButton>-->
+    <!--    <MyButton :disabled="false" @click="switchThemeShort">-->
+    <!--      switchThemeShort mutation норм способ</MyButton-->
+    <!--    >-->
     <pre>refValue: {{ refValue }}</pre>
     <pre>reactiveUser: {{ reactiveValue.reactiveUser }}</pre>
   </div>

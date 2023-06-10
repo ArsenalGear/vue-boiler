@@ -2,6 +2,7 @@
 import { watch, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import userFoto from '@/assets/images/user.png'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
@@ -47,10 +48,12 @@ watch(
   >
     <div class="header__inner">
       <div class="header__logo-block">
-        <img v-if="getTheme === 'dark'" alt="logo" src="@/assets/images/logo_light.png" />
-        <img v-else alt="logo" src="@/assets/images/logo.png" />
+        <div class="header__logo-wrapper">
+          <img v-if="getTheme === 'dark'" alt="logo" src="@/assets/images/logo_light.png" />
+          <img v-else alt="logo" src="@/assets/images/logo.png" />
+        </div>
         <hr />
-        <BaseText type="h3">{{ $t('dashboardTitle') }}</BaseText>
+        <BaseText type="h3">{{ $t('headerTitle') }}</BaseText>
       </div>
       <div class="header__user-block">
         <div class="header__icon-block">
@@ -65,7 +68,7 @@ watch(
           />
         </div>
         <div class="header__avatar-block">
-          <img alt="logo" src="@/assets/images/user.png" />
+          <img alt="logo" :src="userFoto" />
         </div>
 
         <BaseSelect
@@ -135,6 +138,11 @@ watch(
     height: 2rem;
     width: 100%;
   }
+  &__logo-wrapper {
+    min-width: rem(125);
+    min-height: rem(20);
+  }
+
   &__logo-block {
     display: flex;
     align-items: center;

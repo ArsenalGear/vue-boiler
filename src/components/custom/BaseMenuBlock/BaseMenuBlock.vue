@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, reactive, defineProps, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { PPO } from '@/assets/images/imageConstants'
@@ -11,8 +12,9 @@ import { mapGetters } from '@/hooks/useVuex'
 
 type TMenuBlock = { title: string }
 const props = defineProps<TMenuBlock>()
-
-const activeItem = reactive({ activeIndex: null })
+const route = useRoute()
+//todo type reactive
+const activeItem = reactive<{ activeIndex: number | null }>({ activeIndex: 0 })
 const palette = reactive(getInitialTheme())
 const { getTheme } = mapGetters()
 const contentRefs = ref<HTMLElement[]>([])
@@ -27,7 +29,8 @@ function toggleAccordion(index: any) {
 
 function getContentStyle(index: number) {
   return {
-    maxHeight: activeItem.activeIndex === index ? `${contentRefs.value[index].scrollHeight}px` : '0'
+    maxHeight:
+      activeItem.activeIndex === index ? `${contentRefs.value[index]?.scrollHeight}px` : '0'
   }
 }
 
@@ -60,7 +63,7 @@ watch(
                   :icon-path="PPO"
                   :icon-color="palette.iconColor"
                 />
-                <BaseText style="margin-bottom: 2px" type="p">{{ item.title }}</BaseText>
+                <BaseText style="margin-bottom: 2px" type="p">{{ $t(item.title.name) }}</BaseText>
               </div>
 
               <span
@@ -75,12 +78,16 @@ watch(
               class="accordion-content"
               :style="getContentStyle(index)"
             >
-              <BaseText
+              <router-link
                 v-for="(section, indexSection) in item.content"
                 :key="indexSection"
-                type="p"
-                >{{ section }}</BaseText
+                :to="`/${section.name}`"
+                :class="{ 'accordion__item-elem': true, active: route.name === section.name }"
               >
+                <div class="accordion__label-wrapper">
+                  <BaseText :class="'small-text'" type="p">{{ $t(section.name) }}</BaseText>
+                </div>
+              </router-link>
             </div>
           </div>
         </div>
@@ -105,6 +112,50 @@ watch(
 }
 
 .accordion {
+  &__item-elem {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    border-radius: 0.5rem;
+
+    &.active {
+      background-color: v-bind('palette.menuItemActive');
+    }
+
+    &:hover {
+      background-color: v-bind('palette.menuItemHover');
+    }
+  }
+
+  &__label-wrapper {
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+    margin: 0;
+    border-radius: 0;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: middle;
+    appearance: none;
+    color: inherit;
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    text-decoration: none;
+    min-width: 0;
+    box-sizing: border-box;
+    text-align: left;
+    padding: 8px 16px;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+
   &-header {
     width: 100%;
     justify-content: space-between;
@@ -124,8 +175,8 @@ watch(
     width: 8px;
     height: 8px;
     margin-bottom: 4px;
-    border: solid #19212f;
-    opacity: 0.3;
+    border: solid v-bind('palette.textColor');
+    opacity: 0.4;
     border-width: 0 1px 1px 0;
     transform: rotate(45deg);
     transition: transform 0.3s ease;
@@ -139,15 +190,13 @@ watch(
   }
 
   &-content {
+    margin-top: rem(12);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
 
     & p {
       margin: 0.5rem 0;
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
   }
 }

@@ -4,7 +4,7 @@
     "username": "username",
     "password": "password"
   },
-  "dashboardTitle": "Administration",
+  "headerTitle": "Administration",
   "chooseList": "Select from the list",
   "changeLanguage": "Change language",
   "logout": "Log out",
@@ -12,5 +12,9 @@
   "authentication": "Authentication",
   "empty": "",
   "menu": "Menu",
-  "dashboard": "Dashboard"
+  "export": "Export/Import PPO",
+  "dashboard": "Dashboard",
+  "dashboardTitle": "Welcome !",
+  "repositories": "Repositories",
+  "add": "Add"
 }

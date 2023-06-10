@@ -5,7 +5,7 @@ import { mapGetters } from '@/hooks/useVuex'
 const { getTheme } = mapGetters()
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
-type TInput = { placeholder: string; name: string }
+type TInput = { placeholder: string; name: string; value: string | number }
 
 const props = defineProps<TInput>()
 const { placeholder } = toRefs(props)
@@ -25,6 +25,7 @@ watch(
       :name="name"
       :placeholder="placeholder"
       class="form-input"
+      :value="value"
       @input="$emit('input', $event.target.value)"
     />
   </div>

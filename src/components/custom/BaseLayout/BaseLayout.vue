@@ -14,8 +14,8 @@ watch(
 </script>
 
 <template>
-  <div class="dashboard-wrapper">
-    <div class="dashboard-wrapper__inner">
+  <div class="layout-wrapper">
+    <div class="layout-wrapper__inner">
       <slot />
     </div>
   </div>
@@ -23,7 +23,7 @@ watch(
 
 <style lang="scss">
 @import '@/assets/styles/functions';
-.dashboard-wrapper {
+.layout-wrapper {
   display: flex;
   width: 100%;
   min-width: 1023px;
