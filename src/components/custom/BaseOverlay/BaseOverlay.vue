@@ -10,7 +10,10 @@ const props = defineProps<TOverlay>()
       <div class="progress-bar"></div>
       <!--      todo props.text-->
       <!--      todo style="color: #ccc"-->
-      <BaseText style="color: #ccc" type="p">{{ $t(props.text || 'empty') }}</BaseText>
+      <!--      todo class-->
+      <BaseText :class="'small-text'" style="color: #ccc" type="p">{{
+        $t(props.text || 'empty')
+      }}</BaseText>
     </div>
   </div>
 </template>
@@ -38,8 +41,8 @@ const props = defineProps<TOverlay>()
 }
 .progress-bar {
   position: relative;
-  width: rem(400);
-  height: rem(8);
+  width: rem(300);
+  height: rem(6);
   margin-bottom: rem(8);
   border: 1px solid #ccc;
   border-radius: 4px;

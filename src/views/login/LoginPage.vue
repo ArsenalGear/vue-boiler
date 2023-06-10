@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as Yup from 'yup'
-import { reactive, watch } from 'vue'
+import { onMounted, reactive, watch } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useStore } from 'vuex'
 
@@ -22,8 +22,8 @@ useHead({
 
 const formData: FormData = reactive({
   isButtonDisabled: true,
-  username: '',
-  password: ''
+  username: 'admin',
+  password: 'admin'
 })
 
 const schema = Yup.object().shape({
@@ -49,6 +49,10 @@ const submitForm = (event: Event): void => {
   }
 }
 
+onMounted(() => {
+  isSubmitButtonDisable()
+})
+
 watch(() => formData, isSubmitButtonDisable, { deep: true })
 </script>
 
@@ -68,7 +72,7 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
               <BaseText :style="{ color: '#19212f' }" type="h1">{{ $t('title') }}</BaseText>
               <div class="form-item-wrapper">
                 <FormInput
-                  name="user"
+                  name="username"
                   :style="{
                     background: '#ffffff',
                     border: 'unset',
@@ -76,6 +80,7 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
                     borderRadius: '0.5rem'
                   }"
                   :placeholder="$t('placeholders.username')"
+                  :value="formData.password"
                   @input="(value) => (formData.username = value)"
                 />
               </div>
@@ -89,6 +94,7 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
                     borderRadius: '0.5rem'
                   }"
                   :placeholder="$t('placeholders.password')"
+                  :value="formData.password"
                   @input="(value) => (formData.password = value)"
                 />
               </div>

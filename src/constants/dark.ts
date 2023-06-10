@@ -24,6 +24,8 @@ export const dark = {
   formSelectLiSelected: '#7191E1',
   formSelectLiHover: '#7191E1cc',
   formSelectIcon: '#ffffff',
+  menuItemActive: '#7191E1',
+  menuItemHover: '#394353BD',
 
   //border
   formInputBorder: ' #19212f80',

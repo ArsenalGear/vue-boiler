@@ -21,6 +21,8 @@ export const light = {
   formSelectBackground: 'transparent',
   formSelectLiHover: '#7191E1cc',
   formSelectIcon: '#19212f80',
+  menuItemActive: '#ECEFF1FF',
+  menuItemHover: '#0000000a',
 
   //border
   formInputBorder: '#19212f80',
