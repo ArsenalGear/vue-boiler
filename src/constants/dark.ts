@@ -26,8 +26,11 @@ export const dark = {
   formSelectIcon: '#ffffff',
   menuItemActive: '#7191E1',
   menuItemHover: '#394353BD',
+  tableRowBackground: '#394353',
+  tableRowBackgroundActive: '#7191E1',
 
   //border
-  formInputBorder: ' #19212f80',
-  formInputBorderHover: ' #7191e1'
+  formInputBorder: '#19212f80',
+  formInputBorderHover: '#7191e1',
+  tableBorder: '#ffffff0d'
 }

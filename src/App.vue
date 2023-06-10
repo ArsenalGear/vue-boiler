@@ -11,8 +11,9 @@ const palette = reactive(getInitialTheme())
 const { getTheme, 'auth/getOverlayText': getOverlayText } = mapGetters()
 
 watch(
-  () => getTheme.value.themeColor,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 

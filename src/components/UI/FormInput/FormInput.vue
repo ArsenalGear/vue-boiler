@@ -13,8 +13,9 @@ const palette = reactive(getInitialTheme())
 defineEmits(['input'])
 
 watch(
-  () => getTheme.value,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
@@ -54,7 +55,7 @@ watch(
     align-items: center;
     padding: rem(6) rem(12);
     background: v-bind('palette.formInputBackground');
-    border-radius: 4px;
+    border-radius: rem(4);
     border: 1px solid v-bind('palette.formInputBorder');
     &:hover {
       border: 1px solid v-bind('palette.formInputBorderHover');

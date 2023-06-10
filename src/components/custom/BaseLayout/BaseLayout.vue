@@ -8,8 +8,9 @@ const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
 
 watch(
-  () => getTheme.value,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
