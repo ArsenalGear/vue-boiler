@@ -23,8 +23,11 @@ export const light = {
   formSelectIcon: '#19212f80',
   menuItemActive: '#ECEFF1FF',
   menuItemHover: '#0000000a',
+  tableRowBackground: '#F7F8FAFF',
+  tableRowBackgroundActive: '#ECEFF1FF',
 
   //border
   formInputBorder: '#19212f80',
-  formInputBorderHover: ' #7191e1'
+  formInputBorderHover: '#7191e1',
+  tableBorder: '#19212f0c'
 }

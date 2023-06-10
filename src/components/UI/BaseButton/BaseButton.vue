@@ -12,8 +12,9 @@ const { disabled } = toRefs(props)
 const palette = reactive(getInitialTheme())
 
 watch(
-  () => getTheme.value.themeColor,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
@@ -36,7 +37,7 @@ watch(
   margin: 0;
   user-select: none;
   vertical-align: middle;
-  border-radius: 8px;
+  border-radius: rem(8);
   text-transform: none;
   letter-spacing: 0.02857em;
   font: rem(16) / rem(18) Roboto-Medium;

@@ -34,8 +34,9 @@ const handleChangeSettings = (value: string) => {
 
 //todo getTheme.value
 watch(
-  () => getTheme.value,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
@@ -92,8 +93,8 @@ watch(
   width: 100%;
   min-height: 13.25rem;
   padding: 1.5rem 1.5rem 0;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
+  border-bottom-left-radius: rem(18);
+  border-bottom-right-radius: rem(18);
   background-image: linear-gradient(
     233.98deg,
     rgb(210, 218, 236) 0%,

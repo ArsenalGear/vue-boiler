@@ -43,8 +43,9 @@ const selectOption = (option: { value: string }) => {
 }
 
 watch(
-  () => getTheme.value,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
@@ -85,7 +86,7 @@ watch(
   padding: rem(10) rem(14);
   color: v-bind('palette.textColor');
   border: 1px solid v-bind('palette.formInputBorder');
-  border-radius: 10px;
+  border-radius: rem(10);
   background: v-bind('palette.formSelectBackground');
   cursor: pointer;
 
@@ -102,7 +103,7 @@ watch(
   display: inline-block;
   width: 0;
   height: 0;
-  margin-left: 5px;
+  margin-left: rem(5);
   border-style: solid;
   border-width: 5px 5px 0 5px;
   border-color: v-bind('palette.formSelectIcon') transparent transparent transparent;
@@ -119,10 +120,9 @@ watch(
   margin: 0;
   list-style: none;
   background-color: v-bind('palette.formInputBackground');
-  //border: 1px solid v-bind('palette.formInputBorder');
   border-top: none;
-  border-radius: 8px;
-  box-shadow: rgba(31, 65, 104, 0.1) 0px 4px 16px;
+  border-radius: rem(8);
+  box-shadow: rgba(31, 65, 104, 0.1) 0 rem(4) rem(16);
 }
 
 .dropdown-options li {

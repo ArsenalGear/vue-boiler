@@ -45,7 +45,7 @@ const props = defineProps<TOverlay>()
   height: rem(6);
   margin-bottom: rem(8);
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: rem(4);
   overflow: hidden;
 }
 

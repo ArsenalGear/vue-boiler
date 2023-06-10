@@ -18,7 +18,7 @@ useHead({
   <BaseWrapper class="dashboard-wrapper" :menu-title="'menu'" :content-title="'dashboard'">
     <div class="dashboard-block">
       <img alt="logo" src="@/assets/images/welcome-image.png" />
-      <BaseText :style="{ color: '#19212f' }" type="h1">{{ $t('dashboardTitle') }}</BaseText>
+      <BaseText type="h1">{{ $t('dashboardTitle') }}</BaseText>
     </div>
   </BaseWrapper>
 </template>

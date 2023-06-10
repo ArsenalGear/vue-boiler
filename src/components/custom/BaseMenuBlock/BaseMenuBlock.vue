@@ -43,8 +43,9 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => getTheme.value,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
@@ -152,7 +153,7 @@ watch(
     min-width: 0;
     box-sizing: border-box;
     text-align: left;
-    padding: 8px 16px;
+    padding: rem(8) rem(16);
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   }
 
@@ -174,7 +175,7 @@ watch(
   & .arrow-right {
     width: 8px;
     height: 8px;
-    margin-bottom: 4px;
+    margin-bottom: rem(4);
     border: solid v-bind('palette.textColor');
     opacity: 0.4;
     border-width: 0 1px 1px 0;

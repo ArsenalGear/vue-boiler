@@ -12,8 +12,9 @@ const props = defineProps<TBaseText>()
 const { type } = toRefs(props)
 
 watch(
-  () => getTheme.value,
-  () => handleThemeChange(palette)
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
 )
 </script>
 
