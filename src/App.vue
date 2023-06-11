@@ -9,7 +9,6 @@ const palette = reactive(getInitialTheme())
 
 // todo 'auth/getOverlayText': getOverlayText
 const { getTheme, 'auth/getOverlayText': getOverlayText } = mapGetters()
-
 watch(
   () => getTheme,
   () => handleThemeChange(palette),
