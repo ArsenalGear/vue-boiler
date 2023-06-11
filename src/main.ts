@@ -11,7 +11,8 @@ import components from '@/components/UI'
 import customComponents from '@/components/custom'
 import { languages } from '@/i18n'
 import { defaultLocale } from '@/i18n'
-
+const test: boolean = 5
+console.log('123', test)
 const head = createHead()
 const messages = Object.assign(languages)
 
