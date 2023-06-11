@@ -16,5 +16,8 @@
   "dashboard": "Dashboard",
   "dashboardTitle": "Welcome !",
   "repositories": "Repositories",
-  "add": "Add"
+  "add": "Add",
+  "repo": "Repository",
+  "address": "Address",
+  "user": "User"
 }

@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-function isNotAuthRoute(route: any) {
+function isNotAuthRoute(route: { path: string }): boolean {
   const notAuthRoutePaths = notAuthRoutesList.map((e) => `/${e.path}`)
   return notAuthRoutePaths.includes(route.path)
 }

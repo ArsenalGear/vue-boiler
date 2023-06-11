@@ -19,7 +19,7 @@ const palette = reactive(getInitialTheme())
 const { getTheme } = mapGetters()
 const contentRefs = ref<HTMLElement[]>([])
 
-function toggleAccordion(index: any) {
+function toggleAccordion(index: number) {
   if (activeItem.activeIndex === index) {
     activeItem.activeIndex = null
   } else {

@@ -8,16 +8,12 @@ import { mapGetters } from '@/hooks/useVuex'
 const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
 
-// type TTable = { tableData: { title: TTableHeader[]; data: TTableData[] } }
-// type TTableHeader = { name: string; label: string; width: string }
-// type TTableData = { row: TTableRow[] }
-// type TTableRow = { label: string; component?: any; width: string }
-const props = defineProps<{ data: any; columns: any }>()
-function getWidth(val: string) {
-  return {
-    width: `${val}`
-  }
-}
+type TTableRow = { label: string; key: string; width: string }
+const props: { data: any[]; columns: TTableRow[] } = defineProps<{
+  data: any[]
+  columns: TTableRow[]
+}>()
+const getWidth = (val: string) => ({ width: `${val}` })
 const { columns, data } = toRefs(props)
 watch(
   () => getTheme,
@@ -36,7 +32,7 @@ watch(
           :style="getWidth(column.width)"
           class="main-table__cell"
         >
-          <BaseText class="main-text" type="p">{{ column.label }}</BaseText>
+          <BaseText class="main-text" type="p">{{ $t(`${column.label}`) }}</BaseText>
         </div>
       </div>
       <div class="main-table__empty-row"></div>

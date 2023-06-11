@@ -12,7 +12,12 @@ import BaseSelect from '@/components/UI/BaseSelect/BaseSelect.vue'
 import router from '@/router'
 
 const { locale } = useI18n({ useScope: 'global' })
-const { switchThemeShort, 'auth/setToken': setToken, 'auth/setAuth': setAuth } = mapMutations()
+const {
+  switchThemeShort,
+  'auth/setToken': setToken,
+  'auth/setAuth': setAuth,
+  'auth/switchLang': switchLang
+} = mapMutations()
 const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
 
@@ -29,6 +34,7 @@ const handleChangeSettings = (value: string) => {
   } else {
     locale.value === 'en' ? (locale.value = 'ru') : (locale.value = 'en')
     localStorage.setItem('lang', locale.value as string)
+    switchLang('')
   }
 }
 

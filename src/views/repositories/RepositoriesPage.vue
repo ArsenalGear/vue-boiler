@@ -1,11 +1,21 @@
 <script lang="ts" setup="">
 import { useHead } from '@vueuse/head'
-import { reactive } from 'vue'
+import { onBeforeMount, reactive } from 'vue'
 
+import { getRepositories } from '@/api/repositoriesAPI'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
+type TRepositories = {
+  id: string
+  name: string
+  token: string
+  type: string
+  url: string
+  username: string
+}
+
 useHead({
   title: 'Репозитории',
   meta: [
@@ -16,20 +26,22 @@ useHead({
   ]
 })
 
-const tableData = reactive([
-  { repoName: 'Репозиторий1', currentAddress: 'Адрес1', currentUser: 'user1' },
-  { repoName: 'Репозиторий2', currentAddress: 'Адрес2', currentUser: 'user2' },
-  { repoName: 'Репозиторий2', currentAddress: 'Адрес3', currentUser: 'user3' }
-])
+const repositories: TRepositories[] = reactive<TRepositories[]>([])
+onBeforeMount(async () => {
+  const repos: TRepositories[] = await getRepositories()
+  repositories.push(...repos)
+})
 
 const tableColumns = reactive([
-  { key: 'repoNameColumn', label: 'Репозиторий', width: '30%' },
-  { key: 'ageColumn', label: 'Адрес', width: '40%' },
-  { key: 'addressColumn', label: 'Имя пользователя', width: '30%' }
+  { key: 'name', label: 'repo', width: '30%' },
+  { key: 'url', label: 'address', width: '30%' },
+  { key: 'username', label: 'user', width: '30%' },
+  { key: 'id', label: 'empty', width: '10%' }
 ])
 
-const handleButtonClick = (item, key) => {
-  console.log(`Нажата кнопка ${key} для элемента ${item.currentUser}`)
+const handleButtonClick = (item: { id: string }, key: string) => {
+  console.log(`Нажата кнопка ${key} для элемента`)
+  console.log('123', item.id)
 }
 </script>
 
@@ -38,25 +50,26 @@ const handleButtonClick = (item, key) => {
     <div class="repositories-header">
       <FormButton>{{ $t('add') }}</FormButton>
     </div>
-    <BaseTable :data="tableData" :columns="tableColumns">
+    <BaseTable :data="repositories" :columns="tableColumns">
       <template v-for="column in tableColumns" #[column.key]="{ item }">
+        <BaseText v-if="column.key === 'name'" :key="column.key" class="small-text" type="p">{{
+          item.name
+        }}</BaseText>
+
+        <BaseText v-else-if="column.key === 'url'" :key="column.key" class="small-text" type="p">
+          {{ item.url }}
+        </BaseText>
         <BaseText
-          v-if="column.key === 'repoNameColumn'"
+          v-else-if="column.key === 'username'"
           :key="column.key"
           class="small-text"
           type="p"
-          >{{ item.repoName }}</BaseText
+          >{{ item.username }}</BaseText
         >
-        <FormButton
-          v-else-if="column.key === 'ageColumn'"
-          :key="column.key"
-          @click="handleButtonClick(item, column.key)"
-        >
-          {{ item.currentAddress }}
+
+        <FormButton v-else :key="column.key" @click="handleButtonClick(item, column.key)">
+          {{ 1 }}
         </FormButton>
-        <BaseText v-else :key="column.key" class="small-text" type="p">{{
-          item.currentUser
-        }}</BaseText>
       </template>
     </BaseTable>
   </BaseWrapper>
