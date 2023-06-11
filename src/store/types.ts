@@ -10,4 +10,5 @@ export type AuthState = {
   overlayText: string
   token: string
   isAuthenticated: boolean
+  lang: string
 }
