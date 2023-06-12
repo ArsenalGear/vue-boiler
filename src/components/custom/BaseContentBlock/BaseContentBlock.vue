@@ -8,7 +8,7 @@ const props = defineProps<TContentBlock>()
 <template>
   <div class="content-block">
     <BaseText type="h2">{{ $t(props.title) }}</BaseText>
-    <BasePaper><slot /></BasePaper>
+    <BasePaper class="maxheight"><slot /></BasePaper>
   </div>
 </template>
 

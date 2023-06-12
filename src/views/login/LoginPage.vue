@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 import { onMounted, reactive, watch } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useStore } from 'vuex'
+
 import BaseButton from '@/components/UI/BaseButton/BaseButton.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import FormInput from '@/components/UI/FormInput/FormInput.vue'

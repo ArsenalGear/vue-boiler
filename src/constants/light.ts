@@ -5,8 +5,10 @@ export const light = {
   //color
   textColor: '#19212f',
   iconColor: '#7191E1',
+  contextMenuColor: 'rgba(0,0,0,0.4)',
   baseButtonColor: '#ffffff',
   baseButtonDisabledColor: '#19212f',
+  paginationTextColor: '#19212f4d',
 
   //background
   paperBackground: '#ffffff',
@@ -25,6 +27,8 @@ export const light = {
   menuItemHover: '#0000000a',
   tableRowBackground: '#F7F8FAFF',
   tableRowBackgroundActive: '#ECEFF1FF',
+  tableHeaderBackgroundActive: '#fff',
+  paginationButtonHover: '#0000000a',
 
   //border
   formInputBorder: '#19212f80',

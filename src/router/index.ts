@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
 const authRoutesList = [
-  { path: 'about', component: 'AboutPage' },
   { path: 'dashboard', component: 'DashboardPage' },
   { path: 'repositories', component: 'RepositoriesPage' },
   { path: 'NotFoundAuthPage', component: 'NotFoundAuthPage' }

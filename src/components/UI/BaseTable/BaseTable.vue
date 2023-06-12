@@ -1,20 +1,24 @@
 <script setup lang="ts">
-import { toRefs, reactive } from 'vue'
-import { watch } from 'vue'
+import { toRefs, reactive, defineEmits, watch } from 'vue'
 
+import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
+import { TPageData, TTableRow } from '@/components/UI/BaseTable/types'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import { mapGetters } from '@/hooks/useVuex'
 const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
 
-type TTableRow = { label: string; key: string; width: string }
-const props: { data: any[]; columns: TTableRow[] } = defineProps<{
+const emit = defineEmits(['pageChanged'])
+const props: { data: any[]; columns: TTableRow[]; paginationData: TPageData } = defineProps<{
   data: any[]
   columns: TTableRow[]
+  paginationData: TPageData
 }>()
+
 const getWidth = (val: string) => ({ width: `${val}` })
 const { columns, data } = toRefs(props)
+
 watch(
   () => getTheme,
   () => handleThemeChange(palette),
@@ -52,6 +56,13 @@ watch(
       </div>
     </div>
   </div>
+  <!--todo emit emit('pageChanged', pageNumber-->
+  <BasePagination
+    :totalItems="paginationData.totalItems"
+    :itemsPerPage="paginationData.itemsPerPage"
+    :currentPage="paginationData.currentPage"
+    @pageChanged="(pageNumber) => emit('pageChanged', pageNumber)"
+  />
 </template>
 
 <style lang="scss">
@@ -60,6 +71,22 @@ watch(
   margin: 0 1.5rem;
   padding-bottom: 1.2rem;
   border-bottom: 2px solid v-bind('palette.tableBorder');
+  height: calc(100% - 7rem);
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 8px; /* Adjust the width as needed */
+    border-radius: 4px; /* Add rounded corners */
+    background-color: v-bind('palette.paperBackground'); /* Set a background color */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: v-bind('palette.tableBorder'); /* Set the color of the scrollbar thumb */
+    border-radius: 4px; /* Add rounded corners to the thumb */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Set the color of the scrollbar thumb on hover */
+  }
 }
 .main-table {
   width: 100%;
@@ -72,6 +99,10 @@ watch(
     display: table-row;
   }
   &__header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: v-bind('palette.tableHeaderBackgroundActive');
     display: table-row;
   }
   &__row {
@@ -85,6 +116,10 @@ watch(
 
     &:hover .main-table__row-cell {
       background-color: v-bind('palette.tableRowBackgroundActive');
+
+      & g {
+        fill: white;
+      }
 
       &:first-child {
         border-bottom-left-radius: rem(8);

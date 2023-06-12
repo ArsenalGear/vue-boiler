@@ -1,32 +1,19 @@
 import { get } from '@/api/config'
+import { TPageData } from '@/components/UI/BaseTable/types'
+import { TRepositories, TRepositoriesList } from '@/views/repositories/types'
 
 export const getRepositories = async (page: number, size: number) => {
   return await get(`/endpoints?type=GIT&page=${page}&size=${size}`).then((response) => {
     return {
       data: response.data,
-      totalPages: response.headers['x-page-count']
+      totalPages: response.headers['x-total-count']
     }
   })
 }
 
-type TPageData = {
-  totalItems: number | string
-  itemsPerPage: number
-  currentPage: number
-}
-
-type TRepositories = {
-  id: string
-  name: string
-  token: string
-  type: string
-  url: string
-  username: string
-}
-
 export const getRepo = async (
   page: number,
-  repositories: { data: TRepositories[] },
+  repositories: TRepositoriesList,
   setOverlayText: any,
   pageData: TPageData
 ) => {

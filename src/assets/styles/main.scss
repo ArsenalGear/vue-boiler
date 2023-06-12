@@ -13,6 +13,18 @@
 .form-item-wrapper {
   margin-bottom: rem(20);
 }
+button {
+  border-style: none;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+  text-decoration: none;
+  appearance: none;
+  display: inline-block;
+  margin: 0;
+  outline: none;
+  background: transparent;
+}
 
 
 //$primary: purple;

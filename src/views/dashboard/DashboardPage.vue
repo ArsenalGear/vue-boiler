@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
 import { useHead } from '@vueuse/head'
+
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 
