@@ -1,9 +1,10 @@
 <script lang="ts" setup="">
 import { useHead } from '@vueuse/head'
 import { onBeforeMount, reactive } from 'vue'
+
+import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import { getRepo } from '@/api/repositoriesAPI'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
-import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
 import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
