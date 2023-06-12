@@ -1,29 +1,23 @@
 <script lang="ts" setup="">
 import { useHead } from '@vueuse/head'
 import { onBeforeMount, reactive } from 'vue'
+import { watch } from 'vue'
 
+import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
+import { ContextMenu } from '@/assets/images/imageConstants'
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import { getRepo } from '@/api/repositoriesAPI'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
-import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
-import { mapMutations } from '@/hooks/useVuex'
+import { mapGetters, mapMutations } from '@/hooks/useVuex'
+import { TPageData } from '@/components/UI/BaseTable/types'
+import { TRepositories, TRepositoriesList } from '@/views/repositories/types'
+import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
-type TPageData = {
-  totalItems: number | string
-  itemsPerPage: number
-  currentPage: number
-}
+const { getTheme } = mapGetters()
 
-type TRepositories = {
-  id: string
-  name: string
-  token: string
-  type: string
-  url: string
-  username: string
-}
+const palette = reactive(getInitialTheme())
 
 useHead({
   title: 'Репозитории',
@@ -37,7 +31,7 @@ useHead({
 
 const { 'auth/setOverlayText': setOverlayText } = mapMutations()
 
-const repositories: { data: TRepositories[] } = reactive<{ data: TRepositories[] }>({ data: [] })
+const repositories: TRepositoriesList = reactive<TRepositoriesList>({ data: [] })
 
 const tableColumns = reactive([
   { key: 'name', label: 'repo', width: '30%' },
@@ -46,16 +40,16 @@ const tableColumns = reactive([
   { key: 'id', label: 'empty', width: '10%' }
 ])
 
+const pageData: TPageData = reactive<TPageData>({
+  totalItems: 0,
+  itemsPerPage: 15,
+  currentPage: 1
+})
+
 const handleButtonClick = (item: { id: string }, key: string) => {
   console.log(`Нажата кнопка ${key} для элемента`)
   console.log('123', item.id)
 }
-
-const pageData: TPageData = reactive<TPageData>({
-  totalItems: 0,
-  itemsPerPage: 1,
-  currentPage: 1
-})
 
 const handlePageChange = async (page: number): Promise<void> => {
   const response = await getRepo(page, repositories, setOverlayText, pageData)
@@ -66,6 +60,12 @@ const handlePageChange = async (page: number): Promise<void> => {
   }
 }
 
+watch(
+  () => getTheme,
+  () => handleThemeChange(palette),
+  { deep: true }
+)
+
 onBeforeMount(() => handlePageChange(pageData.currentPage))
 </script>
 
@@ -74,7 +74,12 @@ onBeforeMount(() => handlePageChange(pageData.currentPage))
     <div class="repositories-header">
       <FormButton>{{ $t('add') }}</FormButton>
     </div>
-    <BaseTable :data="repositories.data" :columns="tableColumns">
+    <BaseTable
+      @pageChanged="handlePageChange"
+      :paginationData="pageData"
+      :data="repositories.data"
+      :columns="tableColumns"
+    >
       <template v-for="column in tableColumns" #[column.key]="{ item }">
         <BaseText v-if="column.key === 'name'" :key="column.key" class="small-text" type="p">{{
           item.name
@@ -91,17 +96,17 @@ onBeforeMount(() => handlePageChange(pageData.currentPage))
           >{{ item.username }}</BaseText
         >
 
-        <FormButton v-else :key="column.key" @click="handleButtonClick(item, column.key)">
-          {{ 1 }}
-        </FormButton>
+        <BaseSvg
+          v-else
+          :key="column.key"
+          @click="handleButtonClick(item, column.key)"
+          :width="`24`"
+          :height="`24`"
+          :icon-path="ContextMenu"
+          :icon-color="palette.contextMenuColor"
+        />
       </template>
     </BaseTable>
-    <BasePagination
-      :totalItems="pageData.totalItems"
-      :itemsPerPage="pageData.itemsPerPage"
-      :currentPage="pageData.currentPage"
-      @pageChanged="handlePageChange"
-    />
   </BaseWrapper>
 </template>
 

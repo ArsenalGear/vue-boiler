@@ -31,6 +31,10 @@ watch(
   flex-direction: column;
   transition: all 0.5s ease 0s;
 
+  &.maxheight {
+    height: calc(100vh - 11rem);
+  }
+
   &__block {
     width: 100%;
     height: 100%;

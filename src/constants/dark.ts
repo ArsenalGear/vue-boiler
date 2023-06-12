@@ -8,8 +8,10 @@ export const dark = {
   //color
   textColor: '#f9f9fc',
   iconColor: '#7191E1',
+  contextMenuColor: '#7191E1',
   baseButtonColor: '#ffffff',
   baseButtonDisabledColor: '#19212f',
+  paginationTextColor: '#fff',
 
   //background
   paperBackground: '#2f394a',
@@ -28,6 +30,8 @@ export const dark = {
   menuItemHover: '#394353BD',
   tableRowBackground: '#394353',
   tableRowBackgroundActive: '#7191E1',
+  tableHeaderBackgroundActive: '#2f394a',
+  paginationButtonHover: '#ffffff14',
 
   //border
   formInputBorder: '#19212f80',
