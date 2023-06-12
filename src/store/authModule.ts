@@ -50,8 +50,7 @@ export const authModule = {
       try {
         commit('setOverlayText', 'authentication')
         await router.push('/dashboard')
-        const result = await getRepositories()
-        console.log('result', result)
+        await getRepositories()
       } catch (e) {
         console.log(e)
       } finally {
@@ -67,11 +66,9 @@ export const authModule = {
       const { isButtonDisabled, ...rest } = data
       try {
         commit('setOverlayText', 'authorization')
-        console.log(12222)
         const result: { id_token: string } = await post(`/authenticate`, rest).then(
           (response) => response.data
         )
-        console.log('123', result)
         commit('setToken', result.id_token)
         commit('setAuth', true)
         await dispatch('getOrderMigration')

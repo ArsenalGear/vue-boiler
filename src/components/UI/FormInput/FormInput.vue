@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, reactive, toRefs } from 'vue'
+import { watch, reactive, toRefs, defineEmits } from 'vue'
 
 import { mapGetters } from '@/hooks/useVuex'
 const { getTheme } = mapGetters()
@@ -10,13 +10,16 @@ type TInput = { placeholder: string; name: string; value: string | number }
 const props = defineProps<TInput>()
 const { placeholder } = toRefs(props)
 const palette = reactive(getInitialTheme())
-defineEmits(['input'])
+const emit = defineEmits(['input'])
 
 watch(
   () => getTheme,
   () => handleThemeChange(palette),
   { deep: true }
 )
+const getInputValue = (value: string) => {
+  emit('input', value)
+}
 </script>
 
 <template>
@@ -27,7 +30,7 @@ watch(
       :placeholder="placeholder"
       class="form-input"
       :value="value"
-      @input="$emit('input', $event.target.value)"
+      @input="(e) => getInputValue(e.target.value)"
     />
   </div>
 </template>
@@ -59,6 +62,16 @@ watch(
     border: 1px solid v-bind('palette.formInputBorder');
     &:hover {
       border: 1px solid v-bind('palette.formInputBorderHover');
+    }
+
+    &.login-input {
+      background: #ffffff;
+      border: unset;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      & input {
+        color: #19212f;
+      }
     }
   }
 

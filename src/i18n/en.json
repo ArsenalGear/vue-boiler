@@ -19,5 +19,6 @@
   "add": "Add",
   "repo": "Repository",
   "address": "Address",
-  "user": "User"
+  "user": "User",
+  "getRepo": "Get repositories"
 }

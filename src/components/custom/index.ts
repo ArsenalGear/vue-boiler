@@ -6,6 +6,7 @@ import BaseContentLayout from '@/components/custom/BaseContentLayout/BaseContent
 import BaseMenuBlock from '@/components/custom/BaseMenuBlock/BaseMenuBlock.vue'
 import BaseContentBlock from '@/components/custom/BaseContentBlock/BaseContentBlock.vue'
 import BaseWrapper from '@/components/custom/BaseContentBlock/BaseContentBlock.vue'
+import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
 
 export default [
   { name: 'BaseHeader', component: BaseHeader },
@@ -15,5 +16,6 @@ export default [
   { name: 'BaseContentLayout', component: BaseContentLayout },
   { name: 'BaseMenuBlock', component: BaseMenuBlock },
   { name: 'BaseContentBlock', component: BaseContentBlock },
-  { name: 'BaseWrapper', component: BaseWrapper }
+  { name: 'BaseWrapper', component: BaseWrapper },
+  { name: 'BasePagination', component: BasePagination }
 ]
