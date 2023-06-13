@@ -42,6 +42,14 @@ watch(
   letter-spacing: 0.00938em;
   font: rem(16) / rem(18) Roboto-Medium;
 }
+.main-regular {
+  margin: 0;
+  padding: 0;
+  color: v-bind('palette.textColor');
+  letter-spacing: 0.00938em;
+  font: rem(16) / rem(18) Roboto-Regular;
+  opacity: 0.5;
+}
 h1 {
   margin: 0 0 rem(24);
   font: rem(24) / rem(28) Roboto-Bold;

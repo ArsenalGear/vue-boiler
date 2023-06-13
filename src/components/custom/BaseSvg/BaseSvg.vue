@@ -1,9 +1,11 @@
 <template>
   <svg
+    class="svg-block"
     xmlns="http://www.w3.org/2000/svg"
     :opacity="opacity"
-    :width="`${width}`"
-    :height="`${height}`"
+    :width="`${width}px`"
+    :height="`${height}px`"
+    :viewBox="`0 0 ${width} ${height}`"
   >
     <g :fill="iconColor">
       <path :d="iconPath"></path>
@@ -16,15 +18,15 @@ export default {
   props: {
     width: {
       type: String,
-      default: '18'
+      default: '10'
     },
     height: {
       type: String,
-      default: '18'
+      default: '10'
     },
     iconColor: {
       type: String,
-      default: 'red'
+      default: 'grey'
     },
     iconPath: {
       type: String,
@@ -37,3 +39,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import '@/assets/styles/functions';
+.svg-block {
+  width: 18px !important;
+  height: 18px !important;
+}
+</style>

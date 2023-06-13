@@ -1,10 +1,10 @@
-import type { Dispatch, Commit } from 'vuex'
+import type { Commit } from 'vuex'
+// import type { Dispatch, Commit } from 'vuex'
 
 import { type FormData } from '@/views/login/types'
 import { post } from '@/api/config'
 import type { AuthState } from '@/store/types'
 import router from '@/router'
-import { getRepositories } from '@/api/repositoriesAPI'
 
 export const authModule = {
   state: () => ({
@@ -50,7 +50,7 @@ export const authModule = {
       try {
         commit('setOverlayText', 'authentication')
         await router.push('/dashboard')
-        await getRepositories()
+        // await getRepositories()
       } catch (e) {
         console.log(e)
       } finally {
@@ -59,7 +59,8 @@ export const authModule = {
     },
 
     async getTokenAPI(
-      { dispatch, commit }: { dispatch: Dispatch; commit: Commit },
+      // { dispatch, commit }: { dispatch: Dispatch; commit: Commit },
+      { commit }: { commit: Commit },
       data: FormData
     ) {
       // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
@@ -71,7 +72,9 @@ export const authModule = {
         )
         commit('setToken', result.id_token)
         commit('setAuth', true)
-        await dispatch('getOrderMigration')
+        commit('setOverlayText', 'authentication')
+        await router.push('/dashboard')
+        // await dispatch('getOrderMigration')
       } catch (e) {
         console.log(e)
       } finally {

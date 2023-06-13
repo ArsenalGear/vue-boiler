@@ -26,60 +26,13 @@ button {
   background: transparent;
 }
 
+li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
 
-//$primary: purple;
-
-//.header {
-//  background: blue;
-//  width: 200px;
-//  height: 200px;
-//}
-//.main {
-//  background: red;
-//}
-//.footer {
-//  background: green;
-//  width: 200px;
-//  height: 200px;
-//}
-
-//a, .green {
-//    text-decoration: none;
-//    color: hsla(160, 100%, 37%, 1);
-//    transition: 0.4s;
-//}
-//
-//#app {
-//    font-family: Avenir, Helvetica, Arial, sans-serif;
-//    -webkit-font-smoothing: antialiased;
-//    -moz-osx-font-smoothing: grayscale;
-//    text-align: center;
-//    color: #2c3e50;
-//}
-//
-//@media (min-width: 1024px) {
-//    .about {
-//        min-height: 100vh;
-//        display: flex;
-//        align-items: center;
-//    }
-//}
-//
-//@media (hover: hover) {
-//    a:hover {
-//        background-color: hsla(160, 100%, 37%, 0.2);
-//    }
-//}
-//
-//@media (min-width: 1024px) {
-//    body {
-//        display: flex;
-//        place-items: center;
-//    }
-//
-//    #app {
-//        display: grid;
-//        grid-template-columns: 1fr 1fr;
-//        padding: 0 2rem;
-//    }
-//}
+ul {
+  margin: 0;
+  padding: 0;
+}

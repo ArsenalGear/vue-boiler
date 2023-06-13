@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import { useHead } from '@vueuse/head'
-import { onBeforeMount, reactive } from 'vue'
+import { onBeforeMount, reactive, ref, onUnmounted, onMounted, Ref } from 'vue'
 import { watch } from 'vue'
 
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
@@ -18,6 +18,13 @@ import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 const { getTheme } = mapGetters()
 
 const palette = reactive(getInitialTheme())
+
+type TPopUpData = {
+  isPopupVisible: boolean
+  popupTop: number
+  popupLeft: number
+  screenWidth: number
+}
 
 useHead({
   title: 'Репозитории',
@@ -45,13 +52,22 @@ const pageData: TPageData = reactive<TPageData>({
   itemsPerPage: 15,
   currentPage: 1
 })
+const popUpData: TPopUpData = reactive<TPopUpData>({
+  isPopupVisible: false,
+  popupTop: 0,
+  popupLeft: 0,
+  screenWidth: 0
+})
 
-const handleButtonClick = (item: { id: string }, key: string) => {
-  console.log(`Нажата кнопка ${key} для элемента`)
-  console.log('123', item.id)
+const handleButtonClick = (item: { id: string }, key: string, ev: any) => {
+  const y = ev.clientY
+  popUpData.isPopupVisible = true
+  calculatePopupPosition(y)
+  // console.log(`Нажата кнопка ${key} для элемента`)
+  // console.log('123', item.id)
 }
 
-const handlePageChange = async (page: number): Promise<void> => {
+const handleGetRepo = async (page: number): Promise<void> => {
   const response = await getRepo(page, repositories, setOverlayText, pageData)
   if (response) {
     const { data, totalPages }: { data: TRepositories[]; totalPages: number } = response
@@ -60,13 +76,46 @@ const handlePageChange = async (page: number): Promise<void> => {
   }
 }
 
+const button: Ref<HTMLElement | null> = ref(null)
+const popup: Ref<HTMLElement | null> = ref(null)
+
+const hidePopup = () => (popUpData.isPopupVisible = false)
+
+const handleClickOutside = (event: Event) => {
+  if (!event.target || !(event.target instanceof HTMLElement)) return
+  if (!event.target.closest('.popup')) {
+    hidePopup()
+  }
+}
+
+const calculatePopupPosition = (y: number) => {
+  if (!button.value) return
+  const buttonRect = button.value.getBoundingClientRect()
+  popUpData.popupTop = y - 10
+  popUpData.popupLeft = buttonRect.left - buttonRect.width - 150
+}
+
+const handleResize = () => {
+  if (!button.value) return
+  const buttonRect = button.value.getBoundingClientRect()
+  popUpData.popupLeft = buttonRect.left - buttonRect.width - 150
+  popUpData.screenWidth = window.innerWidth
+}
+
 watch(
   () => getTheme,
   () => handleThemeChange(palette),
   { deep: true }
 )
 
-onBeforeMount(() => handlePageChange(pageData.currentPage))
+onBeforeMount(() => handleGetRepo(pageData.currentPage))
+
+onMounted(() => window.addEventListener('resize', handleResize))
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('resize', handleResize)
+})
 </script>
 
 <template>
@@ -74,8 +123,28 @@ onBeforeMount(() => handlePageChange(pageData.currentPage))
     <div class="repositories-header">
       <FormButton>{{ $t('add') }}</FormButton>
     </div>
+    <div v-if="popUpData.isPopupVisible" class="popup-overlay" @click="hidePopup">
+      <div
+        ref="popup"
+        class="popup"
+        :style="{ top: `${popUpData.popupTop}px`, left: `${popUpData.popupLeft}px` }"
+        @click.stop
+      >
+        <div class="popup__wrapper">
+          <ul>
+            <li>
+              <BaseText class="main-regular" type="p">Редактировать</BaseText>
+            </li>
+            <li>
+              <BaseText class="main-regular" type="p">Удалить</BaseText>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <BaseTable
-      @pageChanged="handlePageChange"
+      @pageChanged="handleGetRepo"
       :paginationData="pageData"
       :data="repositories.data"
       :columns="tableColumns"
@@ -84,7 +153,6 @@ onBeforeMount(() => handlePageChange(pageData.currentPage))
         <BaseText v-if="column.key === 'name'" :key="column.key" class="small-text" type="p">{{
           item.name
         }}</BaseText>
-
         <BaseText v-else-if="column.key === 'url'" :key="column.key" class="small-text" type="p">
           {{ item.url }}
         </BaseText>
@@ -95,16 +163,19 @@ onBeforeMount(() => handlePageChange(pageData.currentPage))
           type="p"
           >{{ item.username }}</BaseText
         >
-
-        <BaseSvg
-          v-else
+        <button
           :key="column.key"
-          @click="handleButtonClick(item, column.key)"
-          :width="`24`"
-          :height="`24`"
-          :icon-path="ContextMenu"
-          :icon-color="palette.contextMenuColor"
-        />
+          v-else
+          ref="button"
+          @click="(ev) => handleButtonClick(item, column.key, ev)"
+        >
+          <BaseSvg
+            :width="`20`"
+            :height="`20`"
+            :icon-path="ContextMenu"
+            :icon-color="palette.contextMenuColor"
+          />
+        </button>
       </template>
     </BaseTable>
   </BaseWrapper>
@@ -114,5 +185,44 @@ onBeforeMount(() => handlePageChange(pageData.currentPage))
 @import '@/assets/styles/functions';
 .repositories-header {
   padding: rem(10) rem(26);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  position: absolute;
+  padding: rem(10) 0;
+  background-color: v-bind('palette.paperBackground');
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+    rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+  overflow: hidden auto;
+  outline: 0;
+  opacity: 1;
+  transform: none;
+  transition: opacity 239ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    transform 159ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transform-origin: 173px 0;
+
+  & li {
+    margin-bottom: rem(6);
+    padding: rem(8) rem(20);
+    cursor: pointer;
+    &:hover {
+      background: v-bind('palette.menuItemHover');
+    }
+    &:last-child {
+      margin: 0;
+    }
+  }
 }
 </style>

@@ -85,7 +85,7 @@ watch(
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Set the color of the scrollbar thumb on hover */
+    //background-color: #555; /* Set the color of the scrollbar thumb on hover */
   }
 }
 .main-table {

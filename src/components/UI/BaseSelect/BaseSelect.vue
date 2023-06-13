@@ -14,6 +14,12 @@ const palette = reactive(getInitialTheme())
 const { list } = toRefs(props)
 const isOpen = ref(false)
 
+const selectOption = (option: { value: string }) => {
+  isOpen.value = false
+  // <!--      //todo emit-->
+  emit('change', option.value)
+}
+
 const handleClickOutside = (event: { target: any }) => {
   const target = event.target
   const dropdown = document.querySelector('.custom-dropdown')
@@ -34,12 +40,6 @@ onBeforeUnmount(() => {
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
-}
-
-const selectOption = (option: { value: string }) => {
-  isOpen.value = false
-  // <!--      //todo emit-->
-  emit('change', option.value)
 }
 
 watch(

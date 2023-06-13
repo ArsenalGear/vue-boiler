@@ -63,8 +63,8 @@ watch(
     <button @click="goToFirstPage" :disabled="currentPage === 1">
       <BaseSvg
         :disabled="currentPage === totalPages"
-        :width="`20`"
-        :height="`20`"
+        :width="`22`"
+        :height="`22`"
         :icon-path="FastBackward"
         :icon-color="palette.contextMenuColor"
       />
@@ -72,8 +72,8 @@ watch(
     <button @click="previousPage" :disabled="currentPage === 1">
       <BaseSvg
         :disabled="currentPage === totalPages"
-        :width="`20`"
-        :height="`20`"
+        :width="`22`"
+        :height="`22`"
         :icon-path="Backward"
         :icon-color="palette.contextMenuColor"
       />
@@ -88,8 +88,8 @@ watch(
     <button @click="nextPage" :disabled="currentPage === totalPages">
       <BaseSvg
         :disabled="currentPage === totalPages"
-        :width="`20`"
-        :height="`20`"
+        :width="`22`"
+        :height="`22`"
         :icon-path="Forward"
         :icon-color="palette.contextMenuColor"
       />
@@ -97,8 +97,8 @@ watch(
     <button @click="goToLastPage" :disabled="currentPage === totalPages">
       <BaseSvg
         :disabled="currentPage === totalPages"
-        :width="`20`"
-        :height="`20`"
+        :width="`22`"
+        :height="`22`"
         :icon-path="FastForward"
         :icon-color="palette.contextMenuColor"
       />
@@ -120,8 +120,8 @@ watch(
 
   & button {
     margin: 0 rem(5);
-    width: 32px;
-    height: 32px;
+    width: rem(32);
+    height: rem(32);
     border-radius: 8px;
     color: v-bind('palette.paginationTextColor');
     font: 0.875rem / 0.875rem Roboto-Bold;
