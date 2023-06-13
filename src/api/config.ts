@@ -14,7 +14,7 @@ const getTokenFromLocalStorage = () => {
 }
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://admin-gateway.core-banking.cloud/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json'
