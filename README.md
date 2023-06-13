@@ -1,46 +1,40 @@
-# vue-morf
+## Библиотеки используюемые на проекте
 
-This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
+1. axios - для асинхронных запросов к бэку
+2. @vueuse/head - для асинхронных запросов к бэку
+3. vue-i18n - поддержка мультиязычности
+4. vuex - поддержка локального стора для хранения данных в приложении
+5. vuex-persist - сохранение локального стора в localstorage
+6. yup - валидация форм
+7. eslint и prettier - библиотеки для написания кода в едином формате, стиле и проверки ошибок
+8. husky - библиотека не дающая сделать реквест, пока не будут устранены ошибки перечисленные в eslint и tsconfig
+9. node-sass - поддержка scss
+10. typescript - типизация для приложения
+11. поддержка темной и светлой темы
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
+## Конфиги проекта
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
+### Установка проекта, библиотек, зависимостей и типов
 ```sh
-npm install
+yarn install
 ```
 
-### Compile and Hot-Reload for Development
+### Запуск проекта
 
 ```sh
-npm run dev
+yarn dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Сборка проекта
 
 ```sh
-npm run build
+yarn build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Запуск проекта собранного проекта
 
 ```sh
-npm run lint
+yarn serve
 ```

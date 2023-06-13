@@ -112,8 +112,6 @@ watch(
   { deep: true }
 )
 
-
-
 onBeforeMount(() => handleGetRepo(pageData.currentPage))
 
 onMounted(() => window.addEventListener('resize', handleResize))
