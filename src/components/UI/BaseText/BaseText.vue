@@ -48,7 +48,7 @@ watch(
   color: v-bind('palette.textColor');
   letter-spacing: 0.00938em;
   font: rem(16) / rem(18) Roboto-Regular;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 h1 {
   margin: 0 0 rem(24);

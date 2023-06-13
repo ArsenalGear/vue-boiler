@@ -6,25 +6,18 @@ import { watch } from 'vue'
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { ContextMenu } from '@/assets/images/imageConstants'
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
-import { getRepo } from '@/api/repositoriesAPI'
+import { deleteRepo, getRepo } from '@/api/repositoriesAPI'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
 import { TPageData } from '@/components/UI/BaseTable/types'
-import { TRepositories, TRepositoriesList } from '@/views/repositories/types'
+import { TPopUpData, TRepositories, TRepositoriesList } from '@/views/repositories/types'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
 const { getTheme } = mapGetters()
 
 const palette = reactive(getInitialTheme())
-
-type TPopUpData = {
-  isPopupVisible: boolean
-  popupTop: number
-  popupLeft: number
-  screenWidth: number
-}
 
 useHead({
   title: 'Репозитории',
@@ -56,24 +49,15 @@ const popUpData: TPopUpData = reactive<TPopUpData>({
   isPopupVisible: false,
   popupTop: 0,
   popupLeft: 0,
-  screenWidth: 0
+  screenWidth: 0,
+  id: ''
 })
 
 const handleButtonClick = (item: { id: string }, key: string, ev: any) => {
   const y = ev.clientY
   popUpData.isPopupVisible = true
+  popUpData.id = item.id
   calculatePopupPosition(y)
-  // console.log(`Нажата кнопка ${key} для элемента`)
-  // console.log('123', item.id)
-}
-
-const handleGetRepo = async (page: number): Promise<void> => {
-  const response = await getRepo(page, repositories, setOverlayText, pageData)
-  if (response) {
-    const { data, totalPages }: { data: TRepositories[]; totalPages: number } = response
-    repositories.data = data
-    pageData.totalItems = totalPages
-  }
 }
 
 const button: Ref<HTMLElement | null> = ref(null)
@@ -100,6 +84,26 @@ const handleResize = () => {
   const buttonRect = button.value.getBoundingClientRect()
   popUpData.popupLeft = buttonRect.left - buttonRect.width - 150
   popUpData.screenWidth = window.innerWidth
+}
+
+const handleEditRepo = () => {
+  console.log('handleEditRepo')
+  hidePopup()
+}
+
+const handleGetRepo = async (page: number): Promise<void> => {
+  const response = await getRepo(page, repositories, setOverlayText, pageData)
+  if (response) {
+    const { data, totalPages }: { data: TRepositories[]; totalPages: number } = response
+    repositories.data = data
+    pageData.totalItems = totalPages
+  }
+}
+
+const handleDeleteRepo = async (): Promise<void> => {
+  hidePopup()
+  await deleteRepo(popUpData.id, setOverlayText)
+  await handleGetRepo(1)
 }
 
 watch(
@@ -133,10 +137,12 @@ onUnmounted(() => {
         <div class="popup__wrapper">
           <ul>
             <li>
-              <BaseText class="main-regular" type="p">Редактировать</BaseText>
+              <BaseText @click="handleEditRepo" class="main-regular" type="p"
+                >Редактировать</BaseText
+              >
             </li>
             <li>
-              <BaseText class="main-regular" type="p">Удалить</BaseText>
+              <BaseText @click="handleDeleteRepo" class="main-regular" type="p">Удалить</BaseText>
             </li>
           </ul>
         </div>

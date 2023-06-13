@@ -20,5 +20,6 @@
   "repo": "Repository",
   "address": "Address",
   "user": "User",
-  "getRepo": "Get repositories"
+  "getRepo": "Get repositories",
+  "deleteRepo": "Delete repository"
 }
