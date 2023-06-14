@@ -7,6 +7,7 @@ import BaseMenuBlock from '@/components/custom/BaseMenuBlock/BaseMenuBlock.vue'
 import BaseContentBlock from '@/components/custom/BaseContentBlock/BaseContentBlock.vue'
 import BaseWrapper from '@/components/custom/BaseContentBlock/BaseContentBlock.vue'
 import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
+import BaseModal from '@/components/custom/BaseModal/BaseModal.vue'
 import BasePopup from '@/components/custom/BasePopup/BasePopup.vue'
 
 export default [
@@ -19,5 +20,6 @@ export default [
   { name: 'BaseContentBlock', component: BaseContentBlock },
   { name: 'BaseWrapper', component: BaseWrapper },
   { name: 'BasePagination', component: BasePagination },
-  { name: 'BasePopup', component: BasePopup }
+  { name: 'BasePopup', component: BasePopup },
+  { name: 'BaseModal', component: BaseModal }
 ]

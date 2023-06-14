@@ -11,7 +11,8 @@ export const authModule = {
     token: '',
     isAuthenticated: false,
     overlayText: 'empty',
-    lang: 'ru'
+    lang: 'ru',
+    isModalOpen: false
   }),
 
   getters: {
@@ -26,6 +27,9 @@ export const authModule = {
     },
     getOverlayText(state: AuthState) {
       return state.overlayText
+    },
+    getIsModalOpen(state: AuthState) {
+      return state.isModalOpen
     }
   },
 
@@ -42,6 +46,9 @@ export const authModule = {
     },
     setOverlayText(state: AuthState, overlayText: string) {
       state.overlayText = overlayText
+    },
+    setModalOpen(state: AuthState, value: boolean) {
+      state.isModalOpen = value
     }
   },
 

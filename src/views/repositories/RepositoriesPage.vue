@@ -3,20 +3,28 @@ import { useHead } from '@vueuse/head'
 import { onBeforeMount, reactive, ref, onUnmounted, onMounted, Ref } from 'vue'
 import { watch } from 'vue'
 
+import FormInput from '@/components/UI/FormInput/FormInput.vue'
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { ContextMenu } from '@/assets/images/imageConstants'
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
-import { deleteRepo, getRepo } from '@/api/repositoriesAPI'
+import { addRepo, deleteRepo, editRepo, getRepo } from '@/api/repositoriesAPI'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
+import BaseModal from '@/components/custom/BaseModal/BaseModal.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
 import { TPageData } from '@/components/UI/BaseTable/types'
-import { TPopUpData, TRepositories, TRepositoriesList } from '@/views/repositories/types'
+import {
+  TFormDataRepo,
+  TPopUpData,
+  TRepositories,
+  TRepositoriesList
+} from '@/views/repositories/types'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import { schemaRepo } from '@/views/repositories/constants'
 
 const { getTheme } = mapGetters()
-
+const { 'auth/setOverlayText': setOverlayText, 'auth/setModalOpen': setModalOpen } = mapMutations()
 const palette = reactive(getInitialTheme())
 
 useHead({
@@ -29,17 +37,16 @@ useHead({
   ]
 })
 
-const { 'auth/setOverlayText': setOverlayText } = mapMutations()
+const button: Ref<HTMLElement | null> = ref(null)
+const popup: Ref<HTMLElement | null> = ref(null)
 
 const repositories: TRepositoriesList = reactive<TRepositoriesList>({ data: [] })
-
 const tableColumns = reactive([
   { key: 'name', label: 'repo', width: '30%' },
   { key: 'url', label: 'address', width: '30%' },
   { key: 'username', label: 'user', width: '30%' },
   { key: 'id', label: 'empty', width: '10%' }
 ])
-
 const pageData: TPageData = reactive<TPageData>({
   totalItems: 0,
   itemsPerPage: 15,
@@ -52,16 +59,29 @@ const popUpData: TPopUpData = reactive<TPopUpData>({
   screenWidth: 0,
   id: ''
 })
+const modalData: { type: string } = reactive<{ type: string }>({
+  type: ''
+})
+const formDataRepo: TFormDataRepo = reactive({
+  name: '',
+  url: '',
+  token: '',
+  username: '',
+  id: '',
+  type: 'GIT',
+  isButtonDisabled: true
+})
 
-const handleButtonClick = (item: { id: string }, key: string, ev: any) => {
+const handleButtonClick = (item: TFormDataRepo, key: string, ev: any) => {
   const y = ev.clientY
   popUpData.isPopupVisible = true
-  popUpData.id = item.id
+  formDataRepo.id = item.id
+  formDataRepo.name = item.name
+  formDataRepo.url = item.url
+  formDataRepo.token = item.token
+  formDataRepo.username = item.username
   calculatePopupPosition(y)
 }
-
-const button: Ref<HTMLElement | null> = ref(null)
-const popup: Ref<HTMLElement | null> = ref(null)
 
 const hidePopup = () => (popUpData.isPopupVisible = false)
 
@@ -87,7 +107,8 @@ const handleResize = () => {
 }
 
 const handleEditRepo = () => {
-  console.log('handleEditRepo')
+  modalData.type = 'edit'
+  setModalOpen(true)
   hidePopup()
 }
 
@@ -98,6 +119,7 @@ const handleGetRepo = async (page: number): Promise<void> => {
     repositories.data = data
     pageData.totalItems = totalPages
   }
+  setModalOpen(false)
 }
 
 const handleDeleteRepo = async (): Promise<void> => {
@@ -106,11 +128,43 @@ const handleDeleteRepo = async (): Promise<void> => {
   await handleGetRepo(1)
 }
 
+const clearFormData = () => {
+  formDataRepo.isButtonDisabled = true
+  formDataRepo.name = ''
+  formDataRepo.url = ''
+  formDataRepo.token = ''
+  formDataRepo.username = ''
+  formDataRepo.id = ''
+}
+
+const handleAddRepo = async (): Promise<void> => {
+  if (modalData.type === 'edit') {
+    await editRepo(formDataRepo, setOverlayText)
+  } else {
+    await addRepo(formDataRepo, setOverlayText)
+  }
+  await handleGetRepo(1)
+  clearFormData()
+  setModalOpen(false)
+}
+
+const isSubmitButtonDisable = (): void => {
+  schemaRepo
+    .isValid(formDataRepo)
+    .then((valid) => {
+      formDataRepo.isButtonDisabled = !valid
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+}
+
 watch(
   () => getTheme,
   () => handleThemeChange(palette),
   { deep: true }
 )
+watch(() => formDataRepo, isSubmitButtonDisable, { deep: true })
 
 onBeforeMount(() => handleGetRepo(pageData.currentPage))
 
@@ -125,8 +179,17 @@ onUnmounted(() => {
 <template>
   <BaseWrapper :menu-title="'menu'" :content-title="'repositories'">
     <div class="repositories-header">
-      <FormButton>{{ $t('add') }}</FormButton>
+      <FormButton
+        @click="
+          () => {
+            modalData.type = 'create'
+            setModalOpen(true)
+          }
+        "
+        >{{ $t('add') }}</FormButton
+      >
     </div>
+
     <div v-if="popUpData.isPopupVisible" class="popup-overlay" @click="hidePopup">
       <div
         ref="popup"
@@ -137,18 +200,28 @@ onUnmounted(() => {
         <div class="popup__wrapper">
           <ul>
             <li>
-              <BaseText @click="handleEditRepo" class="main-regular" type="p"
-                >Редактировать</BaseText
-              >
+              <BaseText @click="handleEditRepo" class="main-regular" type="p">{{
+                $t('edit')
+              }}</BaseText>
             </li>
             <li>
-              <BaseText @click="handleDeleteRepo" class="main-regular" type="p">Удалить</BaseText>
+              <BaseText
+                @click="
+                  () => {
+                    modalData.type = 'delete'
+                    setModalOpen(true)
+                    hidePopup()
+                  }
+                "
+                class="main-regular"
+                type="p"
+                >{{ $t('delete') }}</BaseText
+              >
             </li>
           </ul>
         </div>
       </div>
     </div>
-
     <BaseTable
       @pageChanged="handleGetRepo"
       :paginationData="pageData"
@@ -184,6 +257,61 @@ onUnmounted(() => {
         </button>
       </template>
     </BaseTable>
+
+    <BaseModal
+      :title="modalData.type === 'create' ? $t('createRepo') : $t('editRepo')"
+      v-if="modalData.type === 'create' || modalData.type === 'edit'"
+      @handleSaveModal="handleAddRepo"
+      :disabled="formDataRepo.isButtonDisabled"
+    >
+      <form @submit.prevent>
+        <div class="form-item-wrapper">
+          <FormInput
+            name="name"
+            :required="true"
+            :label="$t('repoName')"
+            :value="formDataRepo.name"
+            @input="(value) => (formDataRepo.name = value)"
+          />
+        </div>
+        <div class="form-item-wrapper">
+          <FormInput
+            name="url"
+            :required="true"
+            :label="$t('address')"
+            :value="formDataRepo.url"
+            @input="(value) => (formDataRepo.url = value)"
+          />
+        </div>
+        <div class="form-item-wrapper">
+          <FormInput
+            :required="true"
+            name="token"
+            :label="$t('token')"
+            :value="formDataRepo.token"
+            @input="(value) => (formDataRepo.token = value)"
+          />
+        </div>
+        <div class="form-item-wrapper">
+          <FormInput
+            :required="true"
+            name="username"
+            :label="$t('userName')"
+            :value="formDataRepo.username"
+            @input="(value) => (formDataRepo.username = value)"
+          />
+        </div>
+      </form>
+    </BaseModal>
+
+    <BaseModal
+      v-if="modalData.type === 'delete'"
+      :title="$t('confirmDelete')"
+      @handleSaveModal="handleDeleteRepo"
+      :disabled="false"
+    >
+      <BaseText type="h4">{{ $t('confirmDeleteRepo') }}: {{ popUpData.id }} ?</BaseText>
+    </BaseModal>
   </BaseWrapper>
 </template>
 

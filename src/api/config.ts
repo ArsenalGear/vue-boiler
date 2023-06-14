@@ -33,4 +33,4 @@ axiosInstance.interceptors.request.use(
 export const get = (url: string) => axiosInstance.get(url)
 export const deleteMethod = (url: string) => axiosInstance.delete(url)
 export const post = (url: string, data: any, config?: any) => axiosInstance.post(url, data, config)
-// export const put = (url: string, data: any) => axiosInstance.put(url, data)
+export const put = (url: string, data: any) => axiosInstance.put(url, data)

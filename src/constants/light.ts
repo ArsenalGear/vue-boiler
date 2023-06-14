@@ -31,7 +31,7 @@ export const light = {
   paginationButtonHover: '#0000000a',
 
   //border
-  formInputBorder: '#19212f80',
+  formInputBorder: '#0000003b',
   formInputBorderHover: '#7191e1',
   tableBorder: '#19212f0c'
 }
