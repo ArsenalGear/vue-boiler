@@ -78,7 +78,7 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
               <div class="form-item-wrapper">
                 <FormInput
                   name="username"
-                  class="login-input"
+                  :loginInput="true"
                   :placeholder="$t('placeholders.username')"
                   :value="formData.password"
                   @input="handleLoginChange"
@@ -87,7 +87,7 @@ watch(() => formData, isSubmitButtonDisable, { deep: true })
               <div class="form-item-wrapper">
                 <FormInput
                   name="password"
-                  class="login-input"
+                  :loginInput="true"
                   :placeholder="$t('placeholders.password')"
                   :value="formData.password"
                   @input="(value) => (formData.password = value)"

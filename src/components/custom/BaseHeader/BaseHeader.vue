@@ -27,6 +27,7 @@ const handleChangeSettings = (value: string) => {
   if (value === 'logout') {
     //todo store.commit
     // store.commit('auth/setToken', '')
+    switchThemeShort('light')
     setToken('')
     setAuth(false)
     localStorage.clear()

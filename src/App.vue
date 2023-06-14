@@ -9,6 +9,7 @@ const palette = reactive(getInitialTheme())
 
 // todo 'auth/getOverlayText': getOverlayText
 const { getTheme, 'auth/getOverlayText': getOverlayText } = mapGetters()
+
 watch(
   () => getTheme,
   () => handleThemeChange(palette),
@@ -22,10 +23,14 @@ watch(
 </template>
 
 <style lang="scss">
+@import '@/assets/styles/functions';
 * {
   margin: 0;
   //padding: 0;
   box-sizing: border-box;
   //transition: 0.1s;
+}
+body {
+  margin: 0;
 }
 </style>

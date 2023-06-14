@@ -28,6 +28,9 @@ watch(
   <h2 v-else-if="type === 'h2'">
     <slot />
   </h2>
+  <h4 v-else-if="type === 'h4'">
+    <slot />
+  </h4>
   <h3 v-else>
     <slot />
   </h3>
@@ -68,8 +71,15 @@ h3 {
   letter-spacing: 0;
   color: v-bind('palette.textColor');
 }
+h4 {
+  margin: 0;
+  font: rem(18) / rem(22) Roboto-Light;
+  letter-spacing: 0;
+  color: v-bind('palette.textColor');
+}
 .small-text {
   font: 0.875rem / 1rem Roboto-Regular;
+  color: v-bind('palette.textColor');
   letter-spacing: 0.00938em;
 }
 </style>

@@ -21,5 +21,16 @@
   "address": "Address",
   "user": "User",
   "getRepo": "Get repositories",
-  "deleteRepo": "Delete repository"
+  "deleteRepo": "Delete repository",
+  "cancel": "Cancel",
+  "save": "Save",
+  "edit": "Edit",
+  "delete": "Delete",
+  "confirmDeleteRepo": "Delete repository with",
+  "confirmDelete": "Confirm delete?",
+  "createRepo": "Create repository",
+  "editRepo": "Edit repository",
+  "repoName": "Repository name",
+  "token": "Token",
+  "userName": "Username"
 }

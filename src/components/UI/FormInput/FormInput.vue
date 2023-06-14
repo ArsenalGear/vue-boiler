@@ -3,12 +3,20 @@ import { watch, reactive, toRefs, defineEmits } from 'vue'
 
 import { mapGetters } from '@/hooks/useVuex'
 const { getTheme } = mapGetters()
+import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 
-type TInput = { placeholder: string; name: string; value: string | number }
+type TInput = {
+  required?: boolean
+  loginInput?: boolean
+  placeholder?: string
+  label?: string
+  name: string
+  value: string | number
+}
 
 const props = defineProps<TInput>()
-const { placeholder } = toRefs(props)
+const { placeholder, label, loginInput, required } = toRefs(props)
 const palette = reactive(getInitialTheme())
 const emit = defineEmits(['input'])
 
@@ -23,8 +31,14 @@ const getInputValue = (value: string) => {
 </script>
 
 <template>
-  <div class="form-input-wrapper">
+  <div class="title-input-wrapper">
+    <BaseText style="margin-bottom: 0.2rem" class="small-text" type="p">{{ label }}</BaseText>
+    <p v-if="required" class="input-required">*</p>
+  </div>
+
+  <div :class="{ 'form-input-wrapper': true, loginInput: loginInput }">
     <!-- //todo emit-->
+
     <input
       :name="name"
       :placeholder="placeholder"
@@ -37,6 +51,19 @@ const getInputValue = (value: string) => {
 
 <style lang="scss">
 @import '@/assets/styles/functions';
+
+.input-required {
+  margin: 0 0 0 0.125rem;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  letter-spacing: 0.00938em;
+  color: rgb(252, 119, 154);
+}
+
+.title-input-wrapper {
+  display: flex;
+}
 .form-input {
   width: 100%;
   min-width: 0;
@@ -58,13 +85,13 @@ const getInputValue = (value: string) => {
     align-items: center;
     padding: rem(6) rem(12);
     background: v-bind('palette.formInputBackground');
-    border-radius: rem(4);
+    border-radius: rem(8);
     border: 1px solid v-bind('palette.formInputBorder');
     &:hover {
       border: 1px solid v-bind('palette.formInputBorderHover');
     }
 
-    &.login-input {
+    &.loginInput {
       background: #ffffff;
       border: unset;
       height: 2.5rem;
