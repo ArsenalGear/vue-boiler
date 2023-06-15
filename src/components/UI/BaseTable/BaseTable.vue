@@ -49,7 +49,7 @@ const { columns, data } = toRefs(props)
       </div>
     </div>
   </div>
-  <!--todo emit emit('pageChanged', pageNumber-->
+
   <BasePagination
     :totalItems="paginationData.totalItems"
     :itemsPerPage="paginationData.itemsPerPage"

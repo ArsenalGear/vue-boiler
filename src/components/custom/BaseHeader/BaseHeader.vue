@@ -18,7 +18,7 @@ const {
   'auth/setAuth': setAuth,
   'auth/switchLang': switchLang
 } = mapMutations()
-//todo getters
+
 const { getTheme } = mapGetters()
 const { palette } = themeMixin()
 
@@ -26,8 +26,6 @@ const formState = reactive({ settings: '' })
 
 const handleChangeSettings = (value: string) => {
   if (value === 'logout') {
-    //todo store.commit
-    // store.commit('auth/setToken', '')
     switchThemeShort('light')
     setToken('')
     setAuth(false)

@@ -2,7 +2,6 @@
 import { mapGetters } from '@/hooks/useVuex'
 import BaseOverlay from '@/components/custom/BaseOverlay/BaseOverlay.vue'
 
-// todo 'auth/getOverlayText': getOverlayText
 const { 'auth/getOverlayText': getOverlayText } = mapGetters()
 </script>
 

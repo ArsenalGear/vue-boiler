@@ -12,7 +12,6 @@ import themeMixin from '@/mixins/themeMixin'
 type TMenuBlock = { title: string }
 const props = defineProps<TMenuBlock>()
 const route = useRoute()
-//todo type reactive
 const activeItem = reactive<{ activeIndex: number | null }>({ activeIndex: 0 })
 const { palette } = themeMixin()
 const contentRefs = ref<HTMLElement[]>([])

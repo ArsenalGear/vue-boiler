@@ -14,7 +14,6 @@ const isOpen = ref(false)
 
 const selectOption = (option: { value: string }) => {
   isOpen.value = false
-  // <!--      //todo emit-->
   emit('change', option.value)
 }
 
@@ -31,7 +30,6 @@ onMounted(() => {
   window.addEventListener('click', handleClickOutside)
 })
 
-// <!--      //todo onBeforeUnmount-->
 onBeforeUnmount(() => {
   window.removeEventListener('click', handleClickOutside)
 })
