@@ -8,9 +8,6 @@ const props = defineProps<TOverlay>()
   <div class="styled-overlay">
     <div class="progress-wrapper">
       <div class="progress-bar"></div>
-      <!--      todo props.text-->
-      <!--      todo style="color: #ccc"-->
-      <!--      todo class-->
       <BaseText :class="'small-text'" style="color: #ccc" type="p">{{
         $t(props.text || 'empty')
       }}</BaseText>

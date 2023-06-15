@@ -6,7 +6,6 @@ import { mapGetters } from '@/hooks/useVuex'
 const { getTheme } = mapGetters()
 const palette = reactive(getInitialTheme())
 
-//todo watch handleThemeChange
 watch(
   () => getTheme,
   () => handleThemeChange(palette),

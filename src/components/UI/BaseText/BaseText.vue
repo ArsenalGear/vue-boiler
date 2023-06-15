@@ -24,7 +24,6 @@ const { type } = toRefs(props)
     <slot />
   </h4>
   <h3 v-else>
-    `
     <slot />
   </h3>
 </template>
