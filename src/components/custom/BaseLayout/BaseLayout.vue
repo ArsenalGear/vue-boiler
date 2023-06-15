@@ -17,7 +17,7 @@ const { palette } = themeMixin()
 .layout-wrapper {
   display: flex;
   width: 100%;
-  min-width: 1023px;
+  //min-width: 1023px;
   height: 100vh;
   max-height: 100%;
   &__inner {

@@ -1,4 +1,4 @@
-import { Ref, onMounted, onUnmounted, ref } from 'vue'
+import { Ref, onMounted, onUnmounted, ref, computed } from 'vue'
 
 const popupMixin = () => {
   const button: Ref<HTMLElement | null> = ref(null)
@@ -8,6 +8,14 @@ const popupMixin = () => {
   const popupTop = ref(0)
   const popupLeft = ref(0)
   const screenWidth = ref(0)
+
+  const popupLeftValue = computed(() => {
+    if (!button.value) return
+    const buttonRect = button.value.getBoundingClientRect()
+    const isAdaptive = window.innerWidth < 1199 ? 35 : 0
+    console.log('123', isAdaptive)
+    return buttonRect.left - buttonRect.width - 140 + isAdaptive
+  })
 
   const showPopup = (y: number) => {
     isPopupVisible.value = true
@@ -27,18 +35,15 @@ const popupMixin = () => {
   }
 
   const handleResize = () => {
-    if (!button.value) return
-    const buttonRect = button.value.getBoundingClientRect()
-    popupLeft.value = buttonRect.left - buttonRect.width - 140
+    if (!popupLeftValue.value) return
+    popupLeft.value = popupLeftValue.value
     screenWidth.value = window.innerWidth
   }
 
   const calculatePopupPosition = (y: number) => {
-    if (!button.value) return
-    const buttonRect = button.value.getBoundingClientRect()
-
+    if (!popupLeftValue.value) return
     popupTop.value = y - 10
-    popupLeft.value = buttonRect.left - buttonRect.width - 140
+    popupLeft.value = popupLeftValue.value
   }
 
   onMounted(() => {

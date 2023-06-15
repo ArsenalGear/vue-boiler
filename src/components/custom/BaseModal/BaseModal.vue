@@ -23,25 +23,27 @@ const { title, disabled }: any = toRefs(props)
 </script>
 
 <template>
-  <div v-if="getIsModalOpen" class="overlay-modal">
-    <div class="modal-wrapper">
-      <div class="modal-header">
-        <BaseText type="h3">{{ title }}</BaseText>
-        <span class="close" @click="setModalOpen(false)">&times;</span>
-      </div>
-      <div class="modal-body">
-        <slot></slot>
-      </div>
-      <div class="modal-footer">
-        <FormButton class="cancel" type="button" @click="setModalOpen(false)"
-          >{{ $t('cancel') }}
-        </FormButton>
-        <FormButton :disabled="disabled" type="button" @click="hidePopup"
-          >{{ $t('save') }}
-        </FormButton>
+  <transition name="fade">
+    <div v-if="getIsModalOpen" class="overlay-modal">
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <BaseText type="h3">{{ title }}</BaseText>
+          <span class="close" @click="setModalOpen(false)">&times;</span>
+        </div>
+        <div class="modal-body">
+          <slot></slot>
+        </div>
+        <div class="modal-footer">
+          <FormButton class="cancel" type="button" @click="setModalOpen(false)"
+            >{{ $t('cancel') }}
+          </FormButton>
+          <FormButton :disabled="disabled" type="button" @click="hidePopup"
+            >{{ $t('save') }}
+          </FormButton>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style lang="scss">

@@ -12,4 +12,5 @@ export type AuthState = {
   isAuthenticated: boolean
   isModalOpen: boolean
   lang: string
+  modalType: string
 }

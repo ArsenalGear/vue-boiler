@@ -12,7 +12,8 @@ export const authModule = {
     isAuthenticated: false,
     overlayText: 'empty',
     lang: 'ru',
-    isModalOpen: false
+    isModalOpen: false,
+    modalType: ''
   }),
 
   getters: {
@@ -30,6 +31,9 @@ export const authModule = {
     },
     getIsModalOpen(state: AuthState) {
       return state.isModalOpen
+    },
+    getModalType(state: AuthState) {
+      return state.modalType
     }
   },
 
@@ -49,6 +53,9 @@ export const authModule = {
     },
     setModalOpen(state: AuthState, value: boolean) {
       state.isModalOpen = value
+    },
+    setModalType(state: AuthState, value: string) {
+      state.modalType = value
     }
   },
 

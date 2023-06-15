@@ -18,7 +18,7 @@ export type TFormDataRepo = {
   token: string
   username: string
   isButtonDisabled?: boolean
-  id: string
+  id?: string
 }
 // export type TFormDataRepoKey = {
 //   [key: string]: string | boolean

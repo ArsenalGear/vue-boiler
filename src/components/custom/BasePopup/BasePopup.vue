@@ -1,74 +1,69 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, toRefs } from 'vue'
 
-const { 'auth/setModalOpen': setModalOpen } = mapMutations()
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
-import { mapMutations } from '@/hooks/useVuex'
 import themeMixin from '@/mixins/themeMixin'
-import modalMixin from '@/mixins/modalMixin'
-import popupMixin from '@/mixins/popupMixin'
+import { mapMutations } from '@/hooks/useVuex'
+
+const { 'auth/setModalOpen': setModalOpen, 'auth/setModalType': setModalType } = mapMutations()
 const { palette } = themeMixin()
-const { popup } = popupMixin()
-// import themeMixin from '@/mixins/themeMixin'
-const { modalData } = modalMixin()
-// const { palette } = themeMixin()
+
 const emit = defineEmits(['hidePopup'])
-console.log('emit', emit)
+
 const props: {
   isPopupVisible: boolean
-  popupTop: number
   popupLeft: number
+  popupTop: number
 } = defineProps<{
   isPopupVisible: boolean
-  popupTop: number
   popupLeft: number
+  popupTop: number
 }>()
-//
-const { isPopupVisible, popupTop, popupLeft }: any = toRefs(props)
+
+const { isPopupVisible }: any = toRefs(props)
 
 const hidePopup = () => {
   emit('hidePopup', false)
 }
 const handleDeleteRepo = () => {
-  // emit('modalData', 'delete')
-  console.log('modalData', modalData)
-  modalData.type = 'create'
+  setModalType('delete')
   setModalOpen(true)
   hidePopup()
 }
+
 const handleEditRepo = () => {
-  // emit('modalData', 'edit')
-  modalData.type = 'edit'
+  setModalType('edit')
   setModalOpen(true)
   hidePopup()
 }
 </script>
 
 <template>
-  <div v-if="isPopupVisible" class="popup-overlay" @click="hidePopup">
-    <div
-      ref="popup"
-      class="popup"
-      :style="{ top: `${popupTop}px`, left: `${popupLeft}px` }"
-      @click.stop
-    >
-      {{ modalData }}
-      <div class="popup__wrapper">
-        <ul>
-          <li>
-            <BaseText @click="handleEditRepo" class="main-regular" type="p">{{
-              $t('edit')
-            }}</BaseText>
-          </li>
-          <li>
-            <BaseText @click="handleDeleteRepo" class="main-regular" type="p">{{
-              $t('delete')
-            }}</BaseText>
-          </li>
-        </ul>
+  <transition name="fade">
+    <div v-if="isPopupVisible" class="popup-overlay" @click="hidePopup">
+      <div
+        ref="popup"
+        class="popup"
+        :style="{ top: `${popupTop}px`, left: `${popupLeft}px` }"
+        @click.stop
+      >
+        <div class="popup__wrapper">
+          <ul>
+            <li>
+              <BaseText @click="handleEditRepo" class="main-regular" type="p">{{
+                $t('edit')
+              }}</BaseText>
+            </li>
+            <li>
+              <BaseText @click="handleDeleteRepo" class="main-regular" type="p">{{
+                $t('delete')
+              }}</BaseText>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style lang="scss">

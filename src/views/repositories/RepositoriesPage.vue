@@ -7,10 +7,10 @@ import FormInput from '@/components/UI/FormInput/FormInput.vue'
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { ContextMenu } from '@/assets/images/imageConstants'
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
-import { addRepo, deleteRepo, editRepo, getRepo } from '@/api/repositoriesAPI'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 import BaseModal from '@/components/custom/BaseModal/BaseModal.vue'
+import BasePopup from '@/components/custom/BasePopup/BasePopup.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
 import { mapMutations, mapGetters } from '@/hooks/useVuex'
 import themeMixin from '@/mixins/themeMixin'
@@ -18,17 +18,19 @@ import paginationMixin from '@/mixins/paginationMixin'
 import popupMixin from '@/mixins/popupMixin'
 import { TFormDataRepo, TRepositories, TRepositoriesList } from '@/views/repositories/types'
 import { schemaRepo } from '@/views/repositories/constants'
-import modalMixin from '@/mixins/modalMixin'
-
-const { 'auth/setOverlayText': setOverlayText, 'auth/setModalOpen': setModalOpen } = mapMutations()
-const { 'auth/getIsModalOpen': getIsModalOpen } = mapGetters()
+import { useRepo } from '@/hooks/useRepositories'
+const {
+  'auth/setOverlayText': setOverlayText,
+  'auth/setModalOpen': setModalOpen,
+  'auth/setModalType': setModalType
+} = mapMutations()
+const { 'auth/getIsModalOpen': getIsModalOpen, 'auth/getModalType': getModalType } = mapGetters()
 
 const { palette } = themeMixin()
-const { modalData } = modalMixin()
 const { pageData } = paginationMixin()
+const { formDataRepo, addRepo, deleteRepo, editRepo, getRepo } = useRepo()
 const {
   button,
-  popup,
   isPopupVisible,
   popupTop,
   popupLeft,
@@ -55,16 +57,6 @@ const tableColumns = reactive([
   { key: 'id', label: 'empty', width: '10%' }
 ])
 
-const formDataRepo: TFormDataRepo = reactive({
-  name: '',
-  url: '',
-  token: '',
-  username: '',
-  id: '',
-  type: 'GIT',
-  isButtonDisabled: true
-})
-
 const handleOpenPopup = (item: TFormDataRepo, key: string, ev: any) => {
   const y = ev.clientY
   showPopup(y)
@@ -83,12 +75,6 @@ const handleClickOutside = (event: Event) => {
   }
 }
 
-const handleEditRepo = () => {
-  modalData.type = 'edit'
-  setModalOpen(true)
-  hidePopup()
-}
-
 const handleGetRepo = async (page: number): Promise<void> => {
   const response = await getRepo(page, repositories, setOverlayText, pageData)
   if (response) {
@@ -101,7 +87,7 @@ const handleGetRepo = async (page: number): Promise<void> => {
 
 const handleDeleteRepo = async (): Promise<void> => {
   hidePopup()
-  await deleteRepo(formDataRepo.id, setOverlayText)
+  await deleteRepo(formDataRepo.id!, setOverlayText)
   await handleGetRepo(1)
 }
 
@@ -112,10 +98,11 @@ const clearFormData = () => {
   formDataRepo.token = ''
   formDataRepo.username = ''
   formDataRepo.id = ''
+  setModalType('')
 }
 
 const handleAddRepo = async (): Promise<void> => {
-  if (modalData.type === 'edit') {
+  if (getModalType.value === 'edit') {
     await editRepo(formDataRepo, setOverlayText)
   } else {
     await addRepo(formDataRepo, setOverlayText)
@@ -155,7 +142,7 @@ onUnmounted(() => {
       <FormButton
         @click="
           () => {
-            modalData.type = 'create'
+            setModalType('create')
             setModalOpen(true)
           }
         "
@@ -163,39 +150,12 @@ onUnmounted(() => {
       >
     </div>
 
-    <div v-if="isPopupVisible" class="popup-overlay" @click="hidePopup">
-      <div
-        ref="popup"
-        class="popup"
-        :style="{ top: `${popupTop}px`, left: `${popupLeft}px` }"
-        @click.stop
-      >
-        <div class="popup__wrapper">
-          <ul>
-            <li>
-              <BaseText @click="handleEditRepo" class="main-regular" type="p">{{
-                $t('edit')
-              }}</BaseText>
-            </li>
-            <li>
-              <BaseText
-                @click="
-                  () => {
-                    modalData.type = 'delete'
-                    setModalOpen(true)
-                    hidePopup()
-                  }
-                "
-                class="main-regular"
-                type="p"
-                >{{ $t('delete') }}</BaseText
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
+    <BasePopup
+      :popupLeft="popupLeft"
+      :popupTop="popupTop"
+      @hidePopup="hidePopup"
+      :isPopupVisible="isPopupVisible"
+    />
     <BaseTable
       @pageChanged="handleGetRepo"
       :paginationData="pageData"
@@ -233,8 +193,8 @@ onUnmounted(() => {
     </BaseTable>
 
     <BaseModal
-      :title="modalData.type === 'create' ? $t('createRepo') : $t('editRepo')"
-      v-if="modalData.type === 'create' || modalData.type === 'edit'"
+      :title="getModalType === 'create' ? $t('createRepo') : $t('editRepo')"
+      v-if="getModalType === 'create' || getModalType === 'edit'"
       @handleSaveModal="handleAddRepo"
       :disabled="formDataRepo.isButtonDisabled"
     >
@@ -279,7 +239,7 @@ onUnmounted(() => {
     </BaseModal>
 
     <BaseModal
-      v-if="modalData.type === 'delete'"
+      v-if="getModalType === 'delete'"
       :title="$t('confirmDelete')"
       @handleSaveModal="handleDeleteRepo"
       :disabled="false"
@@ -294,43 +254,4 @@ onUnmounted(() => {
 .repositories-header {
   padding: rem(10) rem(26);
 }
-
-//.popup-overlay {
-//  position: fixed;
-//  top: 0;
-//  left: 0;
-//  width: 100%;
-//  height: 100%;
-//  display: flex;
-//  align-items: center;
-//  justify-content: center;
-//}
-//
-//.popup {
-//  position: absolute;
-//  padding: rem(10) 0;
-//  background-color: v-bind('palette.paperBackground');
-//  border-radius: 4px;
-//  box-shadow: rgba(0, 0, 0, 0.2) 0 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
-//    rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
-//  overflow: hidden auto;
-//  outline: 0;
-//  opacity: 1;
-//  transform: none;
-//  transition: opacity 239ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-//    transform 159ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-//  transform-origin: 173px 0;
-//
-//  & li {
-//    margin-bottom: rem(6);
-//    padding: rem(8) rem(20);
-//    cursor: pointer;
-//    &:hover {
-//      background: v-bind('palette.menuItemHover');
-//    }
-//    &:last-child {
-//      margin: 0;
-//    }
-//  }
-//}
 </style>

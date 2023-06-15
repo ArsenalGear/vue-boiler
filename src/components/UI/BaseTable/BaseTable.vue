@@ -65,16 +65,18 @@ const { columns, data } = toRefs(props)
   padding-bottom: 1.2rem;
   border-bottom: 2px solid v-bind('palette.tableBorder');
   height: calc(100% - 7rem);
+  width: 100%;
+  max-width: calc(100vw - 27rem);
   overflow: auto;
   &::-webkit-scrollbar {
-    width: 8px; /* Adjust the width as needed */
-    border-radius: 4px; /* Add rounded corners */
-    background-color: v-bind('palette.paperBackground'); /* Set a background color */
+    width: 8px;
+    border-radius: 4px;
+    background-color: v-bind('palette.paperBackground');
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: v-bind('palette.tableBorder'); /* Set the color of the scrollbar thumb */
-    border-radius: 4px; /* Add rounded corners to the thumb */
+    background-color: v-bind('palette.tableBorder');
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
