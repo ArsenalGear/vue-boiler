@@ -1,6 +1,6 @@
 <script lang="ts" setup="">
 import { useHead } from '@vueuse/head'
-import { onBeforeMount, reactive, ref, onUnmounted, onMounted, Ref } from 'vue'
+import { onBeforeMount, onUnmounted, reactive } from 'vue'
 import { watch } from 'vue'
 
 import FormInput from '@/components/UI/FormInput/FormInput.vue'
@@ -12,20 +12,30 @@ import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseWrapper from '@/components/custom/BaseWrapper/BaseWrapper.vue'
 import BaseModal from '@/components/custom/BaseModal/BaseModal.vue'
 import BaseTable from '@/components/UI/BaseTable/BaseTable.vue'
-import { mapGetters, mapMutations } from '@/hooks/useVuex'
-import { TPageData } from '@/components/UI/BaseTable/types'
-import {
-  TFormDataRepo,
-  TPopUpData,
-  TRepositories,
-  TRepositoriesList
-} from '@/views/repositories/types'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import { mapMutations, mapGetters } from '@/hooks/useVuex'
+import themeMixin from '@/mixins/themeMixin'
+import paginationMixin from '@/mixins/paginationMixin'
+import popupMixin from '@/mixins/popupMixin'
+import { TFormDataRepo, TRepositories, TRepositoriesList } from '@/views/repositories/types'
 import { schemaRepo } from '@/views/repositories/constants'
+import modalMixin from '@/mixins/modalMixin'
 
-const { getTheme } = mapGetters()
 const { 'auth/setOverlayText': setOverlayText, 'auth/setModalOpen': setModalOpen } = mapMutations()
-const palette = reactive(getInitialTheme())
+const { 'auth/getIsModalOpen': getIsModalOpen } = mapGetters()
+
+const { palette } = themeMixin()
+const { modalData } = modalMixin()
+const { pageData } = paginationMixin()
+const {
+  button,
+  popup,
+  isPopupVisible,
+  popupTop,
+  popupLeft,
+  showPopup,
+  hidePopup,
+  calculatePopupPosition
+} = popupMixin()
 
 useHead({
   title: 'Репозитории',
@@ -37,9 +47,6 @@ useHead({
   ]
 })
 
-const button: Ref<HTMLElement | null> = ref(null)
-const popup: Ref<HTMLElement | null> = ref(null)
-
 const repositories: TRepositoriesList = reactive<TRepositoriesList>({ data: [] })
 const tableColumns = reactive([
   { key: 'name', label: 'repo', width: '30%' },
@@ -47,21 +54,7 @@ const tableColumns = reactive([
   { key: 'username', label: 'user', width: '30%' },
   { key: 'id', label: 'empty', width: '10%' }
 ])
-const pageData: TPageData = reactive<TPageData>({
-  totalItems: 0,
-  itemsPerPage: 15,
-  currentPage: 1
-})
-const popUpData: TPopUpData = reactive<TPopUpData>({
-  isPopupVisible: false,
-  popupTop: 0,
-  popupLeft: 0,
-  screenWidth: 0,
-  id: ''
-})
-const modalData: { type: string } = reactive<{ type: string }>({
-  type: ''
-})
+
 const formDataRepo: TFormDataRepo = reactive({
   name: '',
   url: '',
@@ -72,9 +65,9 @@ const formDataRepo: TFormDataRepo = reactive({
   isButtonDisabled: true
 })
 
-const handleButtonClick = (item: TFormDataRepo, key: string, ev: any) => {
+const handleOpenPopup = (item: TFormDataRepo, key: string, ev: any) => {
   const y = ev.clientY
-  popUpData.isPopupVisible = true
+  showPopup(y)
   formDataRepo.id = item.id
   formDataRepo.name = item.name
   formDataRepo.url = item.url
@@ -83,27 +76,11 @@ const handleButtonClick = (item: TFormDataRepo, key: string, ev: any) => {
   calculatePopupPosition(y)
 }
 
-const hidePopup = () => (popUpData.isPopupVisible = false)
-
 const handleClickOutside = (event: Event) => {
   if (!event.target || !(event.target instanceof HTMLElement)) return
   if (!event.target.closest('.popup')) {
     hidePopup()
   }
-}
-
-const calculatePopupPosition = (y: number) => {
-  if (!button.value) return
-  const buttonRect = button.value.getBoundingClientRect()
-  popUpData.popupTop = y - 10
-  popUpData.popupLeft = buttonRect.left - buttonRect.width - 150
-}
-
-const handleResize = () => {
-  if (!button.value) return
-  const buttonRect = button.value.getBoundingClientRect()
-  popUpData.popupLeft = buttonRect.left - buttonRect.width - 150
-  popUpData.screenWidth = window.innerWidth
 }
 
 const handleEditRepo = () => {
@@ -124,7 +101,7 @@ const handleGetRepo = async (page: number): Promise<void> => {
 
 const handleDeleteRepo = async (): Promise<void> => {
   hidePopup()
-  await deleteRepo(popUpData.id, setOverlayText)
+  await deleteRepo(formDataRepo.id, setOverlayText)
   await handleGetRepo(1)
 }
 
@@ -144,7 +121,6 @@ const handleAddRepo = async (): Promise<void> => {
     await addRepo(formDataRepo, setOverlayText)
   }
   await handleGetRepo(1)
-  clearFormData()
   setModalOpen(false)
 }
 
@@ -159,20 +135,17 @@ const isSubmitButtonDisable = (): void => {
     })
 }
 
+watch(() => formDataRepo, isSubmitButtonDisable, { deep: true })
 watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
+  () => getIsModalOpen,
+  () => !getIsModalOpen.value && clearFormData(),
   { deep: true }
 )
-watch(() => formDataRepo, isSubmitButtonDisable, { deep: true })
 
 onBeforeMount(() => handleGetRepo(pageData.currentPage))
 
-onMounted(() => window.addEventListener('resize', handleResize))
-
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
-  window.removeEventListener('resize', handleResize)
 })
 </script>
 
@@ -190,11 +163,11 @@ onUnmounted(() => {
       >
     </div>
 
-    <div v-if="popUpData.isPopupVisible" class="popup-overlay" @click="hidePopup">
+    <div v-if="isPopupVisible" class="popup-overlay" @click="hidePopup">
       <div
         ref="popup"
         class="popup"
-        :style="{ top: `${popUpData.popupTop}px`, left: `${popUpData.popupLeft}px` }"
+        :style="{ top: `${popupTop}px`, left: `${popupLeft}px` }"
         @click.stop
       >
         <div class="popup__wrapper">
@@ -222,6 +195,7 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
+
     <BaseTable
       @pageChanged="handleGetRepo"
       :paginationData="pageData"
@@ -246,7 +220,7 @@ onUnmounted(() => {
           :key="column.key"
           v-else
           ref="button"
-          @click="(ev) => handleButtonClick(item, column.key, ev)"
+          @click="(ev) => handleOpenPopup(item, column.key, ev)"
         >
           <BaseSvg
             :width="`20`"
@@ -310,7 +284,7 @@ onUnmounted(() => {
       @handleSaveModal="handleDeleteRepo"
       :disabled="false"
     >
-      <BaseText type="h4">{{ $t('confirmDeleteRepo') }}: {{ popUpData.id }} ?</BaseText>
+      <BaseText type="h4">{{ $t('confirmDeleteRepo') }}: {{ formDataRepo.id }} ?</BaseText>
     </BaseModal>
   </BaseWrapper>
 </template>
@@ -321,42 +295,42 @@ onUnmounted(() => {
   padding: rem(10) rem(26);
 }
 
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup {
-  position: absolute;
-  padding: rem(10) 0;
-  background-color: v-bind('palette.paperBackground');
-  border-radius: 4px;
-  box-shadow: rgba(0, 0, 0, 0.2) 0 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
-    rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
-  overflow: hidden auto;
-  outline: 0;
-  opacity: 1;
-  transform: none;
-  transition: opacity 239ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    transform 159ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  transform-origin: 173px 0;
-
-  & li {
-    margin-bottom: rem(6);
-    padding: rem(8) rem(20);
-    cursor: pointer;
-    &:hover {
-      background: v-bind('palette.menuItemHover');
-    }
-    &:last-child {
-      margin: 0;
-    }
-  }
-}
+//.popup-overlay {
+//  position: fixed;
+//  top: 0;
+//  left: 0;
+//  width: 100%;
+//  height: 100%;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//}
+//
+//.popup {
+//  position: absolute;
+//  padding: rem(10) 0;
+//  background-color: v-bind('palette.paperBackground');
+//  border-radius: 4px;
+//  box-shadow: rgba(0, 0, 0, 0.2) 0 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px,
+//    rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;
+//  overflow: hidden auto;
+//  outline: 0;
+//  opacity: 1;
+//  transform: none;
+//  transition: opacity 239ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+//    transform 159ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+//  transform-origin: 173px 0;
+//
+//  & li {
+//    margin-bottom: rem(6);
+//    padding: rem(8) rem(20);
+//    cursor: pointer;
+//    &:hover {
+//      background: v-bind('palette.menuItemHover');
+//    }
+//    &:last-child {
+//      margin: 0;
+//    }
+//  }
+//}
 </style>

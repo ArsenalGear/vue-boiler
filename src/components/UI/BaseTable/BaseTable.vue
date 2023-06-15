@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { toRefs, reactive, defineEmits, watch } from 'vue'
+import { toRefs, defineEmits } from 'vue'
 
 import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import { TPageData, TTableRow } from '@/components/UI/BaseTable/types'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
-import { mapGetters } from '@/hooks/useVuex'
-const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
+import themeMixin from '@/mixins/themeMixin'
+
+const { palette } = themeMixin()
 
 const emit = defineEmits(['pageChanged'])
 const props: { data: any[]; columns: TTableRow[]; paginationData: TPageData } = defineProps<{
@@ -18,12 +17,6 @@ const props: { data: any[]; columns: TTableRow[]; paginationData: TPageData } = 
 
 const getWidth = (val: string) => ({ width: `${val}` })
 const { columns, data } = toRefs(props)
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>

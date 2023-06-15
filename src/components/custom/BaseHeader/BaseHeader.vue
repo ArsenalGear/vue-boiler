@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { watch, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import userFoto from '@/assets/images/user.png'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { LightTheme, DarkTheme } from '@/assets/images/imageConstants'
 import BaseSelect from '@/components/UI/BaseSelect/BaseSelect.vue'
 import router from '@/router'
+import themeMixin from '@/mixins/themeMixin'
 
 const { locale } = useI18n({ useScope: 'global' })
 const {
@@ -18,8 +18,9 @@ const {
   'auth/setAuth': setAuth,
   'auth/switchLang': switchLang
 } = mapMutations()
+//todo getters
 const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
+const { palette } = themeMixin()
 
 const formState = reactive({ settings: '' })
 
@@ -38,13 +39,6 @@ const handleChangeSettings = (value: string) => {
     switchLang('')
   }
 }
-
-//todo getTheme.value
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>

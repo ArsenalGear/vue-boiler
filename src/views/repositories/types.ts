@@ -11,14 +11,6 @@ export type TRepositoriesList = {
   data: TRepositories[]
 }
 
-export type TPopUpData = {
-  isPopupVisible: boolean
-  popupTop: number
-  popupLeft: number
-  screenWidth: number
-  id: string
-}
-
 export type TFormDataRepo = {
   name: string
   url: string

@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { reactive, watch, ref, toRefs, onMounted, onBeforeUnmount } from 'vue'
+import { ref, toRefs, onMounted, onBeforeUnmount } from 'vue'
 
-import { mapGetters } from '@/hooks/useVuex'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import themeMixin from '@/mixins/themeMixin'
 
 type TOptionItem = { value: string; label: string }
 type TList = { list: TOptionItem[]; selectedOption: string }
 
 const props = defineProps<TList>()
 const emit = defineEmits(['change'])
-const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
+const { palette } = themeMixin()
 const { list } = toRefs(props)
 const isOpen = ref(false)
 
@@ -41,12 +39,6 @@ onBeforeUnmount(() => {
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value
 }
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>

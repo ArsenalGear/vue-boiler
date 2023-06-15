@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import { watch, reactive, toRefs } from 'vue'
+import { toRefs } from 'vue'
 
-import { mapGetters } from '@/hooks/useVuex'
-const { getTheme } = mapGetters()
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import themeMixin from '@/mixins/themeMixin'
 
 type TBaseText = { type: string }
 
-const palette = reactive(getInitialTheme())
+const { palette } = themeMixin()
 const props = defineProps<TBaseText>()
 const { type } = toRefs(props)
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>

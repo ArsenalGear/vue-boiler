@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { defineEmits, watch, reactive, defineProps, toRefs } from 'vue'
+import { defineEmits, defineProps, toRefs } from 'vue'
 
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
+import themeMixin from '@/mixins/themeMixin'
 
-const { getTheme, 'auth/getIsModalOpen': getIsModalOpen } = mapGetters()
+const { 'auth/getIsModalOpen': getIsModalOpen } = mapGetters()
 const { 'auth/setModalOpen': setModalOpen } = mapMutations()
 
-const palette = reactive(getInitialTheme())
+const { palette } = themeMixin()
 const emit = defineEmits(['handleSaveModal'])
 
 const hidePopup = () => {
@@ -20,12 +20,6 @@ const props: { title: string; disabled?: boolean } = defineProps<{
   disabled: boolean
 }>()
 const { title, disabled }: any = toRefs(props)
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>

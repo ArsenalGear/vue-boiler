@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import { toRefs, watch, reactive } from 'vue'
+import { toRefs } from 'vue'
 
-import { mapGetters } from '@/hooks/useVuex'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import themeMixin from '@/mixins/themeMixin'
 
 type TBaseButton = { disabled?: boolean }
 
-const { getTheme } = mapGetters()
 const props = defineProps<TBaseButton>()
 const { disabled } = toRefs(props)
-const palette = reactive(getInitialTheme())
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
+const { palette } = themeMixin()
 </script>
 
 <template>

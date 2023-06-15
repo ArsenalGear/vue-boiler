@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { toRefs, defineEmits, ref } from 'vue'
 import { computed } from 'vue'
-import { reactive, watch } from 'vue'
 
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
 import { FastForward, FastBackward, Forward, Backward } from '@/assets/images/imageConstants'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
-import { mapGetters } from '@/hooks/useVuex'
+import themeMixin from '@/mixins/themeMixin'
 
 type TPagination = { totalItems: number | string; itemsPerPage: number; currentPage: number }
 
-const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
+const { palette } = themeMixin()
 const props = defineProps<TPagination>()
 const { totalItems, itemsPerPage } = toRefs(props)
 const emit = defineEmits(['pageChanged'])
@@ -50,12 +47,6 @@ const goToLastPage = () => {
   currentPage.value = totalPages.value
   emit('pageChanged', totalPages.value)
 }
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>
