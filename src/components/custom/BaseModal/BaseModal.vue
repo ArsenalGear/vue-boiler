@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { defineEmits, watch, reactive, defineProps, toRefs } from 'vue'
+import { defineEmits, defineProps, toRefs } from 'vue'
 
 import FormButton from '@/components/UI/FormButton/FormButton.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import { mapGetters, mapMutations } from '@/hooks/useVuex'
+import themeMixin from '@/mixins/themeMixin'
 
-const { getTheme, 'auth/getIsModalOpen': getIsModalOpen } = mapGetters()
+const { 'auth/getIsModalOpen': getIsModalOpen } = mapGetters()
 const { 'auth/setModalOpen': setModalOpen } = mapMutations()
 
-const palette = reactive(getInitialTheme())
+const { palette } = themeMixin()
 const emit = defineEmits(['handleSaveModal'])
 
 const hidePopup = () => {
@@ -20,34 +20,30 @@ const props: { title: string; disabled?: boolean } = defineProps<{
   disabled: boolean
 }>()
 const { title, disabled }: any = toRefs(props)
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>
-  <div v-if="getIsModalOpen" class="overlay-modal">
-    <div class="modal-wrapper">
-      <div class="modal-header">
-        <BaseText type="h3">{{ title }}</BaseText>
-        <span class="close" @click="setModalOpen(false)">&times;</span>
-      </div>
-      <div class="modal-body">
-        <slot></slot>
-      </div>
-      <div class="modal-footer">
-        <FormButton class="cancel" type="button" @click="setModalOpen(false)"
-          >{{ $t('cancel') }}
-        </FormButton>
-        <FormButton :disabled="disabled" type="button" @click="hidePopup"
-          >{{ $t('save') }}
-        </FormButton>
+  <transition name="fade">
+    <div v-if="getIsModalOpen" class="overlay-modal">
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <BaseText type="h3">{{ title }}</BaseText>
+          <span class="close" @click="setModalOpen(false)">&times;</span>
+        </div>
+        <div class="modal-body">
+          <slot></slot>
+        </div>
+        <div class="modal-footer">
+          <FormButton class="cancel" type="button" @click="setModalOpen(false)"
+            >{{ $t('cancel') }}
+          </FormButton>
+          <FormButton :disabled="disabled" type="button" @click="hidePopup"
+            >{{ $t('save') }}
+          </FormButton>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style lang="scss">

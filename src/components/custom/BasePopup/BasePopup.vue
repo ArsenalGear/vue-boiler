@@ -1,91 +1,69 @@
 <script setup lang="ts">
-import {
-  defineProps,
-  defineEmits,
-  toRefs,
-  ref,
-  Ref,
-  onMounted,
-  onUnmounted,
-  watch,
-  reactive
-} from 'vue'
+import { defineProps, defineEmits, toRefs } from 'vue'
 
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
-import { mapGetters } from '@/hooks/useVuex'
-import { TPopUpData } from '@/components/custom/BasePopup/types'
+import themeMixin from '@/mixins/themeMixin'
+import { mapMutations } from '@/hooks/useVuex'
 
-const { getTheme } = mapGetters()
+const { 'auth/setModalOpen': setModalOpen, 'auth/setModalType': setModalType } = mapMutations()
+const { palette } = themeMixin()
 
-const palette = reactive(getInitialTheme())
-const emit = defineEmits(['popupOpen', 'screenWidth', 'popupLeft', 'popupTopFrozen'])
-const props: { popUpData: TPopUpData; propsButton: any } = defineProps<{
-  popUpData: TPopUpData
-  propsButton: any
+const emit = defineEmits(['hidePopup'])
+
+const props: {
+  isPopupVisible: boolean
+  popupLeft: number
+  popupTop: number
+} = defineProps<{
+  isPopupVisible: boolean
+  popupLeft: number
+  popupTop: number
 }>()
 
-const { popUpData, propsButton }: any = toRefs(props)
-
-const popup: Ref<HTMLElement | null> = ref(null)
+const { isPopupVisible }: any = toRefs(props)
 
 const hidePopup = () => {
-  emit('popupOpen', false)
+  emit('hidePopup', false)
+}
+const handleDeleteRepo = () => {
+  setModalType('delete')
+  setModalOpen(true)
+  hidePopup()
 }
 
-const handleClickOutside = (event: Event) => {
-  if (!event.target || !(event.target instanceof HTMLElement)) return
-  if (!event.target.closest('.popup')) {
-    hidePopup()
-  }
+const handleEditRepo = () => {
+  setModalType('edit')
+  setModalOpen(true)
+  hidePopup()
 }
-
-const handleResize = () => {
-  const buttonRect = propsButton.value.getBoundingClientRect()
-  const inWidth = window.innerWidth > 1200 ? 150 : 100
-  const inHeight =
-    window.innerWidth > 1200
-      ? Number(popUpData.value.popupTop)
-      : Number(popUpData.value.popupTop) - 100
-  emit('popupLeft', buttonRect.left - buttonRect.width - inWidth)
-  emit('popupTopFrozen', inHeight)
-  emit('screenWidth', window.innerWidth)
-}
-
-onMounted(() => window.addEventListener('resize', handleResize))
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-  window.removeEventListener('resize', handleResize)
-})
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>
-  <div v-if="popUpData.isPopupVisible" class="popup-overlay" @click="hidePopup">
-    <div
-      ref="popup"
-      class="popup"
-      :style="{ top: `${popUpData.popupTopFrozen}px`, left: `${popUpData.popupLeft}px` }"
-      @click.stop
-    >
-      <div class="popup__wrapper">
-        <ul>
-          <li>
-            <BaseText class="main-regular" type="p">Редактировать</BaseText>
-          </li>
-          <li>
-            <BaseText class="main-regular" type="p">Удалить</BaseText>
-          </li>
-        </ul>
+  <transition name="fade">
+    <div v-if="isPopupVisible" class="popup-overlay" @click="hidePopup">
+      <div
+        ref="popup"
+        class="popup"
+        :style="{ top: `${popupTop}px`, left: `${popupLeft}px` }"
+        @click.stop
+      >
+        <div class="popup__wrapper">
+          <ul>
+            <li>
+              <BaseText @click="handleEditRepo" class="main-regular" type="p">{{
+                $t('edit')
+              }}</BaseText>
+            </li>
+            <li>
+              <BaseText @click="handleDeleteRepo" class="main-regular" type="p">{{
+                $t('delete')
+              }}</BaseText>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style lang="scss">
@@ -132,13 +110,3 @@ watch(
   }
 }
 </style>
-
-<!--<BasePopup-->
-<!--    v-if="button"-->
-<!--    :popUpData="popUpData"-->
-<!--    :button="button"-->
-<!--    @popupOpen="popUpData.isPopupVisible = false"-->
-<!--    @screenWidth="(value) => (popUpData.screenWidth = value)"-->
-<!--    @popupLeft="(value) => (popUpData.popupLeft = value)"-->
-<!--    @popupTopFrozen="(value) => (popUpData.popupTopFrozen = value)"-->
-<!--/>-->

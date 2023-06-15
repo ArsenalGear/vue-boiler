@@ -1,17 +1,7 @@
 <script lang="ts" setup="">
-import { reactive } from 'vue'
-import { watch } from 'vue'
+import themeMixin from '@/mixins/themeMixin'
 
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
-import { mapGetters } from '@/hooks/useVuex'
-const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
+const { palette } = themeMixin()
 </script>
 
 <template>
@@ -27,7 +17,7 @@ watch(
 .layout-wrapper {
   display: flex;
   width: 100%;
-  min-width: 1023px;
+  //min-width: 1023px;
   height: 100vh;
   max-height: 100%;
   &__inner {

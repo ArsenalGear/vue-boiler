@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive, defineProps, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, reactive, defineProps, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 
 import BaseSvg from '@/components/custom/BaseSvg/BaseSvg.vue'
@@ -7,16 +7,14 @@ import { PPO } from '@/assets/images/imageConstants'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import BasePaper from '@/components/custom/BasePaper/BasePaper.vue'
 import { menuList } from '@/components/custom/BaseMenuBlock/constants'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
-import { mapGetters } from '@/hooks/useVuex'
+import themeMixin from '@/mixins/themeMixin'
 
 type TMenuBlock = { title: string }
 const props = defineProps<TMenuBlock>()
 const route = useRoute()
 //todo type reactive
 const activeItem = reactive<{ activeIndex: number | null }>({ activeIndex: 0 })
-const palette = reactive(getInitialTheme())
-const { getTheme } = mapGetters()
+const { palette } = themeMixin()
 const contentRefs = ref<HTMLElement[]>([])
 
 function toggleAccordion(index: number) {
@@ -41,12 +39,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   contentRefs.value = []
 })
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>

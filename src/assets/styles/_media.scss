@@ -4,15 +4,15 @@
 @media screen and (max-width: 1199px) {
   html {
     //display: none;
-    //font-size: 12px;
+    font-size: 12px;
 
-    //.layout-wrapper {
-    //  height: 98vh;
-    //}
-    //
-    //.paper__wrapper {
-    //  height: 99%;
-    //}
+    .layout-wrapper {
+      height: 98vh;
+    }
+
+    .paper__wrapper {
+      height: 99%;
+    }
   }
 
 }

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { watch, reactive, toRefs, defineEmits } from 'vue'
+import { toRefs, defineEmits } from 'vue'
 
-import { mapGetters } from '@/hooks/useVuex'
-const { getTheme } = mapGetters()
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
+import themeMixin from '@/mixins/themeMixin'
 
 type TInput = {
   required?: boolean
@@ -17,14 +15,9 @@ type TInput = {
 
 const props = defineProps<TInput>()
 const { placeholder, label, loginInput, required } = toRefs(props)
-const palette = reactive(getInitialTheme())
 const emit = defineEmits(['input'])
+const { palette } = themeMixin()
 
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 const getInputValue = (value: string) => {
   emit('input', value)
 }

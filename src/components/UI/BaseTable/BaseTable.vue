@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { toRefs, reactive, defineEmits, watch } from 'vue'
+import { toRefs, defineEmits } from 'vue'
 
 import BasePagination from '@/components/custom/BasePagination/BasePagination.vue'
 import BaseText from '@/components/UI/BaseText/BaseText.vue'
 import { TPageData, TTableRow } from '@/components/UI/BaseTable/types'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
-import { mapGetters } from '@/hooks/useVuex'
-const { getTheme } = mapGetters()
-const palette = reactive(getInitialTheme())
+import themeMixin from '@/mixins/themeMixin'
+
+const { palette } = themeMixin()
 
 const emit = defineEmits(['pageChanged'])
 const props: { data: any[]; columns: TTableRow[]; paginationData: TPageData } = defineProps<{
@@ -18,12 +17,6 @@ const props: { data: any[]; columns: TTableRow[]; paginationData: TPageData } = 
 
 const getWidth = (val: string) => ({ width: `${val}` })
 const { columns, data } = toRefs(props)
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
 </script>
 
 <template>
@@ -72,16 +65,18 @@ watch(
   padding-bottom: 1.2rem;
   border-bottom: 2px solid v-bind('palette.tableBorder');
   height: calc(100% - 7rem);
+  width: 100%;
+  max-width: calc(100vw - 27rem);
   overflow: auto;
   &::-webkit-scrollbar {
-    width: 8px; /* Adjust the width as needed */
-    border-radius: 4px; /* Add rounded corners */
-    background-color: v-bind('palette.paperBackground'); /* Set a background color */
+    width: 8px;
+    border-radius: 4px;
+    background-color: v-bind('palette.paperBackground');
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: v-bind('palette.tableBorder'); /* Set the color of the scrollbar thumb */
-    border-radius: 4px; /* Add rounded corners to the thumb */
+    background-color: v-bind('palette.tableBorder');
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {

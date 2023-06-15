@@ -1,20 +1,9 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
-
 import { mapGetters } from '@/hooks/useVuex'
-import { getInitialTheme, handleThemeChange } from '@/hooks/useTheme'
 import BaseOverlay from '@/components/custom/BaseOverlay/BaseOverlay.vue'
 
-const palette = reactive(getInitialTheme())
-
 // todo 'auth/getOverlayText': getOverlayText
-const { getTheme, 'auth/getOverlayText': getOverlayText } = mapGetters()
-
-watch(
-  () => getTheme,
-  () => handleThemeChange(palette),
-  { deep: true }
-)
+const { 'auth/getOverlayText': getOverlayText } = mapGetters()
 </script>
 
 <template>
